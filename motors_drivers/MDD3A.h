@@ -30,7 +30,7 @@ private:
     /**
      * Pins numbers
      */
-    unsigned char _A, _B;
+    static unsigned char _A, _B;
 
     /**
      * Booleans used for storing direction information
@@ -66,7 +66,7 @@ private:
                 break;
 
                 /* If direction is backwards, store HIGH on pin B and LOW on pin A */
-            case Direction::FORWARDS:
+            case Direction::BACKWARDS:
                 this->isAHigh = false;
                 this->isBHigh = true;
                 break;

@@ -33,7 +33,7 @@ private:
     /**
      * Pins numbers
      */
-    unsigned char _PWM, _A, _B;
+    static unsigned char _PWM, _A, _B;
 
     /**
      * Sets motor speed absolute value
@@ -63,7 +63,7 @@ private:
                 break;
 
             /* If direction is backwards, write HIGH on pin B and LOW on pin A */
-            case Direction::FORWARDS:
+            case Direction::BACKWARDS:
                 digitalWrite(this->_A, LOW);
                 digitalWrite(this->_B, HIGH);
                 break;

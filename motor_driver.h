@@ -55,20 +55,20 @@ protected:
     virtual void _setMagnitude(int speed) = 0;
 
     /**
-     * Pure virtual method for setting motor direction; it must be implemented so that speed direction of the motor is
-     * equal to the requested one
-     * @param dir       enum indicating whether the motor turns forwards or backwards or if it stays braked or released
-     */
-    virtual void _setDirection(Direction dir) = 0;
-
-    /**
      * Enumeration for describing motor behavior:
      * RELEASED     Motor is free to rotate
      * FORWARDS     Motor rotates forwards at given speed
      * BACKWARDS    Motor rotates backwards at given speed
      * BRAKED       Motor will use engine brake for keeping its position
      */
-    enum class Direction = {RELEASED, FORWARDS, BACKWARDS, BRAKE};
+    enum class Direction {RELEASED, FORWARDS, BACKWARDS, BRAKED};
+
+    /**
+     * Pure virtual method for setting motor direction; it must be implemented so that speed direction of the motor is
+     * equal to the requested one
+     * @param dir       enum indicating whether the motor turns forwards or backwards or if it stays braked or released
+     */
+    virtual void _setDirection(Direction dir) = 0;
 
 private:
     /**
