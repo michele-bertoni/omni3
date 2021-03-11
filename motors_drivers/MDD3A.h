@@ -13,14 +13,10 @@ public:
      * @param A     Pin number for analog pin A
      * @param B     Pin number for analog pin B
      */
-    MDD3A(unsigned char A, unsigned char B) {
-        /* Set pins numbers */
-        this->_A = A;
-        this->_B = B;
-
+    MDD3A(unsigned char A, unsigned char B) : _A(A), _B(B) {
         /* Initialize pins as outputs */
-        pinMode(_A, OUTPUT);
-        pinMode(_B, OUTPUT);
+        pinMode(this->_A, OUTPUT);
+        pinMode(this->_B, OUTPUT);
 
         /* Set motor speed to 0 */
         this->setSpeed(0);
@@ -30,7 +26,7 @@ private:
     /**
      * Pins numbers
      */
-    static unsigned char _A, _B;
+    const unsigned char _A, _B;
 
     /**
      * Booleans used for storing direction information

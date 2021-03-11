@@ -14,12 +14,7 @@ public:
      * @param A     Pin number for digital pin A (direction)
      * @param B     Pin number for digital pin B (direction)
      */
-    MR001004(unsigned char PWM, unsigned char A, unsigned char B) {
-        /* Set pins numbers */
-        this->_PWM = PWM;
-        this->_A = A;
-        this->_B = B;
-
+    MR001004(unsigned char PWM, unsigned char A, unsigned char B) : _PWM(PWM), _A(A), _B(B) {
         /* Initialize pins as outputs */
         pinMode(_PWM, OUTPUT);
         pinMode(_A, OUTPUT);
@@ -33,7 +28,7 @@ private:
     /**
      * Pins numbers
      */
-    static unsigned char _PWM, _A, _B;
+    const unsigned char _PWM, _A, _B;
 
     /**
      * Sets motor speed absolute value
