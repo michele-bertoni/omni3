@@ -10,7 +10,12 @@ public:
     /**
      * Max PWM value; feasible speed will be in [-MAX_PWM, MAX_PWM] range
      */
-    const int MAX_PWM = 255;
+    static const int MAX_PWM = 255;
+
+    /**
+     * Min PWM value; this is the value sent to the motor in order to keep it still
+     */
+    static const int STILL_PWM = 0;
 
     /**
      * Method for setting motor speed
