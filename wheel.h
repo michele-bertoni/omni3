@@ -20,10 +20,9 @@ public:
      * Wheel constructor
      * @param driver    Driver for handling the wheel; it must be an instance of a child class of the class MotorDriver
      * @param encoder   Encoder for reading wheel position
-     * @param maxSpeed  Maximum angular speed of the wheel in rad/s
      */
-    Wheel(const MotorDriver& driver, const Encoder& encoder, float maxSpeed) :
-            driver(driver), encoder(encoder), maxSpeed(maxSpeed) {
+    Wheel(const MotorDriver& driver, const Encoder& encoder) :
+            driver(driver), encoder(encoder), maxSpeed(0) {
         /* Initialize PID constants and initialize speed to 0 */
         this->setDefaultPID();
         this->setNormalizedSpeed(0);
@@ -65,9 +64,13 @@ public:
      * This method sets the target speed of the motor and returns how many steps it moved from last time it was called
      * @param normSpeed requested speed in range [-1, 1]
      * @return number of radians the wheel rotated since last call of this function
-     * @throws invalid_argument if normSpeed is out of range
+     * @throws invalid_argument if normSpeed is out of range or maxSpeed is zero
      */
     float setNormalizedSpeed(float normSpeed) {
+        /* If requested speed is not zero, but maxSpeed is zero, throw an exception */
+        if (normSpeed != 0.0 && this->maxSpeed == 0.0) {
+            throw std::invalid_argument("Wheel's max speed is 0, set a proper maximum angular speed");
+        }
         /* If requested speed is greater than maxSpeed, throw an exception */
         if (normSpeed > 1 || normSpeed < 1) {
             throw std::invalid_argument("Requested speed is higher than wheel's max speed");
@@ -109,16 +112,6 @@ public:
 
 protected:
     /**
-     * This method returns a Wheel with maxSpeed equal to 0; call testMaxSpeed() method in order to get maximum angular
-     * @param driver    Driver for handling the wheel; it must be an instance of a child class of the class MotorDriver
-     * @param encoder   Encoder for reading wheel position
-     * @return wheel whose maxSpeed must be tested
-     */
-    static Wheel getTestWheel(const MotorDriver& driver, const Encoder& encoder) {
-        return Wheel{driver, encoder, 0};
-    }
-
-    /**
      * This method sets the speed of the wheel to maximum value and computes the actual speed in rad/s; it is important
      * to call this method multiple times and for each wheel: keep calling testMaxSpeed() for each wheel for a few
      * seconds, in order to be sure that the wheel reached asymptotic speed; at the end of this process call
@@ -147,10 +140,19 @@ protected:
     /**
      * This method returns the maximum speed reached by calling testMaxSpeed() method; a feasible value of maxSpeed,
      * common for all the wheels, is the minimum speed between the wheels, thus the minimum of the maximums.
-     * @return maximum speed found with testMaxSpeed() method
+     * @return maximum speed found with testMaxSpeed() method in radians per second
      */
     float getTestMaxSpeed() {
         return this->maxSpeed;
+    }
+
+    /**
+     * This method sets the maximum speed reachable by the wheel; maxSpeed should be found with testMaxSpeed() method;
+     * the minimum speed between all the wheels is set after Wheel initialisation, before starting performing movements
+     * @param maxSpeed  maximum angular speed of the wheel in radians per second
+     */
+    void setMaxSpeed(float maxSpeed) {
+        this->maxSpeed = maxSpeed;
     }
 
 private:

@@ -55,19 +55,19 @@ private:
                 this->isBHigh = false;
                 break;
 
-                /* If direction is forwards, store HIGH on pin A and LOW on pin B */
+            /* If direction is forwards, store HIGH on pin A and LOW on pin B */
             case Direction::FORWARDS:
                 this->isAHigh = true;
                 this->isBHigh = false;
                 break;
 
-                /* If direction is backwards, store HIGH on pin B and LOW on pin A */
+            /* If direction is backwards, store HIGH on pin B and LOW on pin A */
             case Direction::BACKWARDS:
                 this->isAHigh = false;
                 this->isBHigh = true;
                 break;
 
-                /* If direction is braked, store HIGH on both A and B pins */
+            /* If direction is braked, store HIGH on both A and B pins */
             case Direction::BRAKED:
                 this->isAHigh = true;
                 this->isBHigh = true;
