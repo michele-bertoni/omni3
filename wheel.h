@@ -110,7 +110,6 @@ public:
      */
     static const float stepsToRadians = TWO_PI / (stepsPerEncoderRevolution * motorGearRatio);
 
-protected:
     /**
      * This method sets the speed of the wheel to maximum value and computes the actual speed in rad/s; it is important
      * to call this method multiple times and for each wheel: keep calling testMaxSpeed() for each wheel for a few
