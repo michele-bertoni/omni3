@@ -1,2 +1,2 @@
-# omni3
-C++ library for moving a 3WD omnidirectional robot
+# Arduino Omni3 library
+

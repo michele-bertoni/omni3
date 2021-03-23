@@ -13,10 +13,14 @@ public:
      * @param A     Pin number for analog pin A
      * @param B     Pin number for analog pin B
      */
-    MDD3A(unsigned char A, unsigned char B) : _A(A), _B(B) {
+    MDD3A(uint8_t A, uint8_t B) : A(A), B(B) {
         /* Initialize pins as outputs */
-        pinMode(this->_A, OUTPUT);
-        pinMode(this->_B, OUTPUT);
+        pinMode(this->A, OUTPUT);
+        pinMode(this->B, OUTPUT);
+
+        /* Initialize isPinHigh */
+        this->isAHigh = false;
+        this->isBHigh = false;
 
         /* Set motor speed to 0 */
         this->setSpeed(0);
@@ -26,7 +30,7 @@ private:
     /**
      * Pins numbers
      */
-    const unsigned char _A, _B;
+    const uint8_t A, B;
 
     /**
      * Booleans used for storing direction information
@@ -37,17 +41,17 @@ private:
      * Sets motor speed absolute value
      * @param speed     integer in [0, MAX_PWM] range
      */
-    void _setMagnitude(int speed) {
+    void setMagnitude(int speed) override {
         /* Write a pulse with the given duty cycle multiplied by the direction */
-        analogWrite(this->isAHigh*this->_A, speed);
-        analogWrite(this->isBHigh*this->_B, speed);
+        analogWrite(this->isAHigh*this->A, speed);
+        analogWrite(this->isBHigh*this->B, speed);
     }
 
     /**
      * Sets motor direction
      * @param dir       enum indicating whether the motor turns forwards or backwards or if it stays braked or released
      */
-    void _setDirection(Direction dir) {
+    void setDirection(Direction dir) override {
         switch(dir) {
             /* If direction is released, store LOW on both A and B pins */
             case Direction::RELEASED:

@@ -21,11 +21,15 @@ public:
      * @param driver    Driver for handling the wheel; it must be an instance of a child class of the class MotorDriver
      * @param encoder   Encoder for reading wheel position
      */
-    Wheel(const MotorDriver& driver, const Encoder& encoder) :
+    Wheel(MotorDriver& driver, Encoder& encoder) :
             driver(driver), encoder(encoder), maxSpeed(0) {
         /* Initialize PID constants and initialize speed to 0 */
-        this->setDefaultPID();
-        this->setNormalizedSpeed(0);
+        this->kP = D_KP;
+        this->kI = D_KI;
+        this->kD = D_KD;
+        this->lastUpdateTime = micros();
+        this->actualSpeed = 0.0f;
+        this->setNormalizedSpeed(0.0f);
     }
 
     /**
@@ -34,17 +38,10 @@ public:
      * @param kI        Integrative constant
      * @param kD        Derivative constant
      */
-    void setPID(float kP, float kI, float kD) {
-        this->kP = kP;
-        this->kI = kI;
-        this->kD = kD;
-    }
-
-    /**
-     * This method sets PID constants to the default ones stored in defines D_KP, D_KI and D_KD
-     */
-    void setDefaultPID() {
-        setPID(D_KP, D_KI, D_KD);
+    void setPID(float _kP, float _kI, float _kD) {
+        this->kP = _kP;
+        this->kI = _kI;
+        this->kD = _kD;
     }
 
     /**
@@ -64,24 +61,23 @@ public:
      * This method sets the target speed of the motor and returns how many steps it moved from last time it was called
      * @param normSpeed requested speed in range [-1, 1]
      * @return number of radians the wheel rotated since last call of this function
-     * @throws invalid_argument if normSpeed is out of range or maxSpeed is zero
      */
     float setNormalizedSpeed(float normSpeed) {
         /* If requested speed is not zero, but maxSpeed is zero, throw an exception */
         if (normSpeed != 0.0 && this->maxSpeed == 0.0) {
-            throw std::invalid_argument("Wheel's max speed is 0, set a proper maximum angular speed");
+            return 0.0;
         }
         /* If requested speed is greater than maxSpeed, throw an exception */
         if (normSpeed > 1 || normSpeed < 1) {
-            throw std::invalid_argument("Requested speed is higher than wheel's max speed");
+            return 0.0;
         }
 
         /* Compute requested speed in [-MAX_PWM, MAX_PWM] range */
-        this->requestedSpeed = this->normAngularToPWM(normSpeed);
+        this->requestedSpeed = Wheel::normAngularToPWM(normSpeed);
 
         /* Get current time and compute elapsed time since last call of this method */
         unsigned long time = micros();
-        float deltaTime = (time-lastUpdateTime) * MICROS;
+        float deltaTime = (float)(time-lastUpdateTime) * MICROS;
 
         /* Compute and update actual speed and store how many steps the wheel turned since last call of this method */
         int steps = this->updateActualSpeed(deltaTime);
@@ -91,7 +87,7 @@ public:
 
         /* Update lastTime with the current one and return the number of radians the wheel turned */
         this->lastUpdateTime = time;
-        return this->stepsToRadians * steps;
+        return Wheel::stepsToRadians * (float)steps;
     }
 
     /**
@@ -108,7 +104,7 @@ public:
     /**
      * Radians for each encoder step
      */
-    static const float stepsToRadians = TWO_PI / (stepsPerEncoderRevolution * motorGearRatio);
+    static constexpr float stepsToRadians = TWO_PI / (stepsPerEncoderRevolution * motorGearRatio);
 
     /**
      * This method sets the speed of the wheel to maximum value and computes the actual speed in rad/s; it is important
@@ -120,7 +116,7 @@ public:
     void testMaxSpeed() {
         /* Get current time and compute elapsed time since last call of this method */
         unsigned long time = micros();
-        float deltaTime = (time-lastUpdateTime) * MICROS;
+        float deltaTime = (float)(time-lastUpdateTime) * MICROS;
 
         /* Compute and update actual speed */
         this->updateActualSpeed(deltaTime);
@@ -141,7 +137,7 @@ public:
      * common for all the wheels, is the minimum speed between the wheels, thus the minimum of the maximums.
      * @return maximum speed found with testMaxSpeed() method in radians per second
      */
-    float getTestMaxSpeed() {
+    float getMaxSpeed() const {
         return this->maxSpeed;
     }
 
@@ -150,20 +146,20 @@ public:
      * the minimum speed between all the wheels is set after Wheel initialisation, before starting performing movements
      * @param maxSpeed  maximum angular speed of the wheel in radians per second
      */
-    void setMaxSpeed(float maxSpeed) {
-        this->maxSpeed = maxSpeed;
+    void setMaxSpeed(float _maxSpeed) {
+        this->maxSpeed = _maxSpeed;
     }
 
 private:
     /**
      * Motor driver
      */
-    const MotorDriver& driver;
+    MotorDriver& driver;
 
     /**
      * Wheel encoder
      */
-    const Encoder& encoder;
+    Encoder& encoder;
 
     /**
      * Maximum angular speed in radians per second
@@ -211,14 +207,14 @@ private:
      * @param angular   speed in rad/s
      * @return PWM value corresponding to the given angular speed; this is usually in range [-MAX_PWM, MAX_PWM]
      */
-    int angularToPWM(float angular) {
+    float angularToPWM(float angular) const {
         /* If maxSpeed is 0, return 0 if also angular is 0, otherwise MAX_PWM with the sign of angular */
         if(maxSpeed == 0) {
             if(angular > 0) {
                 return MotorDriver::MAX_PWM;
             }
             else if(angular < 0) {
-                return -MotorDriver::MAX_PWM
+                return -MotorDriver::MAX_PWM;
             }
             else {
                 return 0;
@@ -226,7 +222,7 @@ private:
         }
 
         /* Compute and return rounded conversion from angular speed to its corresponding PWM value */
-        return (int) ((angular * MotorDriver::MAX_PWM / this->maxSpeed) + 0.5);
+        return angular * MotorDriver::MAX_PWM / this->maxSpeed;
     }
 
     /**
@@ -235,9 +231,9 @@ private:
      * @param nAngular  normalized angular speed; number in range [-1, 1]
      * @return PWM value corresponding to the given normalized angular speed; this will be in range [-MAX_PWM, MAX_PWM]
      */
-    int normAngularToPWM(float nAngular) {
+    static int normAngularToPWM(float nAngular) {
         /* Compute and return rounded conversion from [-1, 1] to [-MAX_PWM, MAX_PWM] */
-        int pwm = (nAngular * MotorDriver::MAX_PWM) + 0.5;
+        int pwm = lround((double)(nAngular * MotorDriver::MAX_PWM));
         return constrain(pwm, -MotorDriver::MAX_PWM, MotorDriver::MAX_PWM);
     }
 
@@ -252,7 +248,7 @@ private:
         int deltaSteps = encoderValue - lastEncoderValue;
 
         /* Compute and store actual angular speed of the wheel */
-        this->actualSpeed = this->stepsToRadians * deltaSteps / deltaTime;
+        this->actualSpeed = Wheel::stepsToRadians * (float)deltaSteps / deltaTime;
 
         /* Update last position of the wheel and return the difference between current and last position */
         this->lastEncoderValue = encoderValue;
@@ -266,13 +262,13 @@ private:
      */
     int updatePID(float deltaTime) {
         /* Compute error as the difference between requested and actual speed */
-        int error = this->requestedSpeed - this->angularToPWM(this->actualSpeed);
+        float error = (float)this->requestedSpeed - this->angularToPWM(this->actualSpeed);
 
         /* Compute integral of error and update cumulative error */
-        this->cumulativeError += error * deltaTime;
+        this->cumulativeError += (float)error * deltaTime;
 
         /* Compute output as the weighted sum of proportional, integrative and derivative errors */
-        int output = (kP * error) + (kI * cumulativeError) + (kD * (error-lastError)/deltaTime);
+        int output = lround((double)((kP * error) + (kI * cumulativeError) + (kD * (error-lastError)/deltaTime)));
 
         /* Update last error for computing next iteration's derivative error */
         this->lastError = error;

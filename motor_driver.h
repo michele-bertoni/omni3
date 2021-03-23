@@ -23,10 +23,10 @@ public:
      */
     void setSpeed(int speed) {
         /* Force speed in [-MAX_PWM, MAX_PWM] range */
-        speed = this->_rangedSpeed(speed);
+        speed = MotorDriver::rangedSpeed(speed);
 
         /* Update current speed */
-        this->_speed = speed;
+        this->speed = speed;
 
         /* Compute direction according to speed sign, then extract speed absolute value */
         Direction direction = Direction::RELEASED;
@@ -39,16 +39,16 @@ public:
         }
 
         /* Set rotation direction and magnitude */
-        this->_setDirection(direction);
-        this->_setMagnitude(speed);
+        this->setDirection(direction);
+        this->setMagnitude(speed);
     }
 
     /**
      * Returns the current speed of the motor
      * @return current speed of the motor; returned value will be in [-MAX_PWM, MAX_PWM] range
      */
-    int getSpeed() {
-        return _speed;
+    int getSpeed() const {
+        return speed;
     }
 
 protected:
@@ -57,7 +57,7 @@ protected:
      * to the requested one
      * @param speed     integer in [0, MAX_PWM] range
      */
-    virtual void _setMagnitude(int speed) = 0;
+    virtual void setMagnitude(int speed) = 0;
 
     /**
      * Enumeration for describing motor behavior:
@@ -73,28 +73,28 @@ protected:
      * equal to the requested one
      * @param dir       enum indicating whether the motor turns forwards or backwards or if it stays braked or released
      */
-    virtual void _setDirection(Direction dir) = 0;
+    virtual void setDirection(Direction dir) = 0;
 
 private:
     /**
      * Current speed of the motor
      */
-    int _speed;
+    int speed=0;
 
     /**
      * Returns a speed in the [-MAX_PWM, MAX_PWM] range
      * @param speed     value to be normalized
      * @return ranged speed
      */
-    int _rangedSpeed(int speed) {
+    static int rangedSpeed(int speed) {
         /* If speed is higher than MAX, return MAX */
-        if(speed > this->MAX_PWM) {
-            return this->MAX_PWM;
+        if(speed > MotorDriver::MAX_PWM) {
+            return MotorDriver::MAX_PWM;
         }
 
         /* If speed is lower than MIN, return MIN */
-        if(speed < -this->MAX_PWM) {
-            return -this->MAX_PWM;
+        if(speed < -MotorDriver::MAX_PWM) {
+            return -MotorDriver::MAX_PWM;
         }
 
         /* Speed was already in the range, just return speed */
