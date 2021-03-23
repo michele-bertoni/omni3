@@ -1,2 +1,3 @@
-# Arduino Omni3 library
+# Omni3
+Arduino library for moving a 3WD omnidirectional robot
 
