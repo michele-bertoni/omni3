@@ -1,0 +1,16 @@
+{
+  "name": "Omni3",
+  "keywords": "robot, omnidirectional, 3WD",
+  "description": "This library controls Arduino-based 3WD omnidirectional robots",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/michele-bertoni/omni3.git"
+  },
+  "frameworks": "arduino",
+  "platforms":
+  [
+    "atmelavr",
+    "teensy"
+  ]
+}
