@@ -2,7 +2,10 @@
 
 /** Public methods */
 omni3_params_t Omni3::readStoredData(int memAddr) {
+    /* initialize data */
     omni3_params_t data;
+
+    /* read EEPROM at given memory address and return read data */
     EEPROM.get(memAddr, data);
     return data;
 }
@@ -24,6 +27,7 @@ void Omni3::handle() {
     directKinematics(angularDisplacement);
     odometry();
 
+    /* Compute delta time in seconds */
     double dt = (time - lastTime) * MILLIS;
 
     /* Initialize array with current strafe, forward and angular speeds */
@@ -35,12 +39,14 @@ void Omni3::handle() {
     /* Compute target speed vector */
     this->movements->handle(currentPosition, currentSpeed, time, targetSpeed);
 
+    /* Update lastTime with current time */
+    lastTime = time;
+
+    /* Compute inverse kinematics, requesting speeds to the motors: if some fails, emergency stop the robot */
     if (!inverseKinematics(targetSpeed)) {
         this->emergencyStop();
         return;
     }
-
-    lastTime = time;
 }
 
 bool Omni3::home() {
@@ -60,6 +66,7 @@ bool Omni3::home() {
 }
 
 void Omni3::emergencyStop() {
+    /* Set max speed to every wheel to 0 */
     for (auto & wheel : wheels) {
         wheel->setMaxSpeed(0.0);
     }
@@ -67,6 +74,7 @@ void Omni3::emergencyStop() {
 
 /** Private methods */
 void Omni3::setWheelsRadius (double wheelsRadius) {
+    /* Set various constants */
     this->R = wheelsRadius;
     this->C30_R = COS30 / wheelsRadius;
     this->C60_R = COS60 / wheelsRadius;
@@ -78,6 +86,7 @@ void Omni3::setWheelsRadius (double wheelsRadius) {
 }
 
 void Omni3::setRobotRadius (double robotRadius) {
+    /* Set various constants */
     this->L = robotRadius;
     this->L_R = robotRadius / this->R;
     this->R_3L = this->R / (3*robotRadius);
@@ -95,6 +104,7 @@ void Omni3::directKinematics(const double* angularDisplacement) {
 }
 
 bool Omni3::inverseKinematics(const double* speed) const {
+    /* Compute S, F and T components */
     const double S = C60_R * speed[STRAFE];
     const double F = C30_R * speed[FORWARD];
     const double T = L_R * speed[THETA];
@@ -110,10 +120,16 @@ bool Omni3::inverseKinematics(const double* speed) const {
 }
 
 void Omni3::odometry() {
-    const double th = currentPosition[POS_PHI] + displacement[THETA]/2.0;
+    /* Compute average angle during last movement */
+    const double alpha = currentPosition[POS_PHI] + displacement[THETA] / 2.0;
 
-    this->currentPosition[POS_X] = cos(th)*displacement[POS_X] - sin(th)*displacement[POS_Y];
-    this->currentPosition[POS_Y] = sin(th)*displacement[POS_X] + cos(th)*displacement[POS_Y];
+    /* x' = x*cos(alpha) - y*sin(alpha) */
+    this->currentPosition[POS_X] = cos(alpha) * displacement[POS_X] - sin(alpha) * displacement[POS_Y];
+
+    /* y' = x*sin(alpha) + y*cos(alpha) */
+    this->currentPosition[POS_Y] = sin(alpha) * displacement[POS_X] + cos(alpha) * displacement[POS_Y];
+
+    /* phi' = phi + theta, phi' in [0, 2*PI) */
     this->currentPosition[POS_PHI] = currentPosition[POS_PHI] + displacement[THETA];
     while (this->currentPosition[POS_PHI] >= TWO_PI) {
         this->currentPosition[POS_PHI] -= TWO_PI;
