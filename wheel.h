@@ -59,14 +59,40 @@ public:
     }
 
     /**
+     * This method updates actual speed, performs PID actuation, sends commands to the driver and returns rotation
+     * @return angular displacement of the wheel since last call of this method
+     */
+    double handle() {
+        /* Get current time and compute elapsed time since last call of this method */
+        unsigned long time = micros();
+        double deltaTime = (time-lastUpdateTime) * MICROS;
+
+        /* Compute and update actual speed and store how many steps the wheel turned since last call of this method */
+        int steps = this->updateActualSpeed(deltaTime);
+
+        /* If maxSpeed is 0.0, update PID, but discard result and stop the motor */
+        if(maxSpeed == 0.0) {
+            this->updatePID(deltaTime);
+            driver.setSpeed(MotorDriver::STILL_PWM);
+        }
+        /* Otherwise, send to the driver the PWM value computed by PID */
+        else {
+            driver.setSpeed(this->updatePID(deltaTime));
+        }
+
+        /* Update lastTime with the current one and return the number of radians the wheel turned */
+        this->lastUpdateTime = time;
+        return Wheel::stepsToRadians * steps;
+    }
+
+    /**
      * This method sets the target speed of the motor and returns how many steps it moved from last time it was called
      * @param speed     requested speed in radians per second
      * @return number of radians the wheel rotated since last call of this function
-     * @throws invalid_argument if normSpeed's absolute value is greater than maximum angular speed of the wheel
      */
-    double setSpeed(double speed) {
-        if(maxSpeed == 0) {
-            return this->setNormalizedSpeed(0);
+    bool setSpeed(double speed) {
+        if(maxSpeed == 0.0) {
+            return this->setNormalizedSpeed(0.0);
         }
         return this->setNormalizedSpeed(speed / this->maxSpeed);
     }
@@ -76,32 +102,19 @@ public:
      * @param normSpeed requested speed in range [-1, 1]
      * @return number of radians the wheel rotated since last call of this function
      */
-    double setNormalizedSpeed(double normSpeed) {
-        /* If requested speed is not zero, but maxSpeed is zero, throw an exception */
+    bool setNormalizedSpeed(double normSpeed) {
+        /* If requested speed is not zero, but maxSpeed is zero, return false */
         if (normSpeed != 0.0 && this->maxSpeed == 0.0) {
-            return 0.0;
+            return false;
         }
-        /* If requested speed is greater than maxSpeed, throw an exception */
+        /* If requested speed is greater than maxSpeed, return false */
         if (normSpeed > 1 || normSpeed < 1) {
-            return 0.0;
+            return false;
         }
 
-        /* Compute requested speed in [-MAX_PWM, MAX_PWM] range */
-        this->requestedSpeed = Wheel::normAngularToPWM(normSpeed);
-
-        /* Get current time and compute elapsed time since last call of this method */
-        unsigned long time = micros();
-        double deltaTime = (time-lastUpdateTime) * MICROS;
-
-        /* Compute and update actual speed and store how many steps the wheel turned since last call of this method */
-        int steps = this->updateActualSpeed(deltaTime);
-
-        /* Send to the driver the PWM value computed by PID */
-        driver.setSpeed(this->updatePID(deltaTime));
-
-        /* Update lastTime with the current one and return the number of radians the wheel turned */
-        this->lastUpdateTime = time;
-        return Wheel::stepsToRadians * steps;
+        /* Compute target speed speed in [-MAX_PWM, MAX_PWM] range and return true */
+        this->targetSpeed = Wheel::normAngularToPWM(normSpeed);
+        return true;
     }
 
     /**
@@ -162,6 +175,11 @@ public:
      */
     void setMaxSpeed(double _maxSpeed) {
         this->maxSpeed = _maxSpeed;
+
+        if(_maxSpeed == 0.0) {
+            driver.setSpeed(MotorDriver::STILL_PWM);
+            this->targetSpeed = 0.0;
+        }
     }
 
 private:
@@ -196,9 +214,9 @@ private:
     int lastEncoderValue = 0;
 
     /**
-     * Last speed requested to the wheel; value in range [-MAX_PWM, MAX_PWM]
+     * Last speed requested by Omni3 to this class; value in range [-MAX_PWM, MAX_PWM]
      */
-    int requestedSpeed = MotorDriver::STILL_PWM;
+    double targetSpeed = MotorDriver::STILL_PWM;
 
     /**
      * Actual speed of the wheel in rad/s
@@ -223,7 +241,7 @@ private:
      */
     double angularToPWM(double angular) const {
         /* If maxSpeed is 0, return 0 if also angular is 0, otherwise MAX_PWM with the sign of angular */
-        if(maxSpeed == 0) {
+        if(this->maxSpeed == 0) {
             if(angular > 0) {
                 return MotorDriver::MAX_PWM;
             }
@@ -245,10 +263,9 @@ private:
      * @param nAngular  normalized angular speed; number in range [-1, 1]
      * @return PWM value corresponding to the given normalized angular speed; this will be in range [-MAX_PWM, MAX_PWM]
      */
-    static int normAngularToPWM(double nAngular) {
-        /* Compute and return rounded conversion from [-1, 1] to [-MAX_PWM, MAX_PWM] */
-        int pwm = lround(nAngular * MotorDriver::MAX_PWM);
-        return constrain(pwm, -MotorDriver::MAX_PWM, MotorDriver::MAX_PWM);
+    static double normAngularToPWM(double nAngular) {
+        /* Compute and return conversion from [-1, 1] to [-MAX_PWM, MAX_PWM] */
+        return constrain(nAngular * MotorDriver::MAX_PWM, -MotorDriver::MAX_PWM, MotorDriver::MAX_PWM);
     }
 
     /**
@@ -276,7 +293,7 @@ private:
      */
     int updatePID(double deltaTime) {
         /* Compute error as the difference between requested and actual speed */
-        double error = this->requestedSpeed - this->angularToPWM(this->actualSpeed);
+        double error = this->targetSpeed - this->angularToPWM(this->actualSpeed);
 
         /* Compute integral of error and update cumulative error */
         this->cumulativeError += error * deltaTime;

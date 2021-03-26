@@ -5,6 +5,7 @@
 #include <EEPROM.h>
 
 #include "wheel.h"
+#include "movements.h"
 #include "motor_drivers/MDD3A.h"
 #include "motor_drivers/MR001004.h"
 
@@ -30,48 +31,6 @@
  * is at 12 o'clock, W_LEFT is the wheel at 10 o'clock
  */
 #define W_LEFT 2
-
-/**
- * Omni3 robots have 2 possible vector frames, each of them having 3 degrees of freedom (DOF)
- * - Displacement vector's frame of reference is jointed with the robot: (FORWARD, STRAFE, THETA)
- * - Position vector's frame of reference is disjoint from the robot: (POS_X, POS_Y, POS_PHI)
- */
-#define DOF 3
-
-/**
- * FORWARD is oriented in the opposite direction than the BACK wheel
- */
-#define FORWARD 0
-
-/**
- * STRAFE is normal to FORWARD vector and oriented towards the LEFT of the robot
- */
-#define STRAFE 1
-
-/**
- * THETA is oriented anti-clockwise, looking the robot from the top
- */
-#define THETA 2
-
-/**
- * When POS_X is homed, it overlaps FORWARD vector
- */
-#define POS_X 0
-
-/**
- * When POS_Y is homed, it overlaps STRAFE vector
- */
-#define POS_Y 1
-
-/**
- * When POS_PHI is homed, it overlaps ANGULAR vector
- */
-#define POS_PHI 2
-
-/**
- * Seconds in one millisecond
- */
-#define MILLIS 0.001
 
 /**
  * Tangent of 30 degrees, or PI/6
@@ -127,10 +86,14 @@ public:
      * @param leftWheel     pointer to the Wheel object, that handles the wheel at 10 o'clock
      * @param parameters    pointer to the omni3_params_t with the desired information
      */
-    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, omni3_params_t parameters) {
+    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, Movements* movements, omni3_params_t parameters) {
+        /* Set array of Wheel pointers */
         wheels[W_RIGHT] = rightWheel;
         wheels[W_BACK] = backWheel;
         wheels[W_LEFT] = leftWheel;
+
+        /* Set movements pointer */
+        this->movements = movements;
 
         /* Set wheels and robot radius*/
         this->setWheelsRadius(parameters.wheelsRadius);
@@ -150,10 +113,13 @@ public:
      * @param leftWheel     pointer to the Wheel object, that handles the wheel at 10 o'clock
      * @param memAddr       starting memory address where data is stored
      */
-    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, int memAddr) :
-            Omni3(rightWheel, backWheel, leftWheel, Omni3::readStoredData(memAddr)) {
+    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, Movements* movements, int memAddr) :
+            Omni3(rightWheel, backWheel, leftWheel, movements, Omni3::readStoredData(memAddr)) {}
 
-    }
+    /**
+     * This method asynchronously handles the movement of the robot: it must be called inside the main Arduino loop
+     */
+    void handle();
 
     /**
      * This static method reads from memory omni3 parameters
@@ -168,7 +134,10 @@ public:
      */
     bool home();
 
-
+    /**
+     * This method instantly stops the robot; Arduino reset is needed in order to make the robot work again
+     */
+    void emergencyStop();
 
 private:
     /**
@@ -179,6 +148,11 @@ private:
      * - wheels[W_LEFT] Wheel will be at 10 o'clock
      */
     Wheel* wheels[WHEELS_NUM]{};
+
+    /**
+     *
+     */
+    Movements* movements;
 
     /**
      * Vector storing the current position of the robot: currentPosition[X]: meters, currentPosition[Y]: meters,
@@ -270,13 +244,22 @@ private:
     /**
      * This method computes and sets wheels' angular speeds, given the desired robot speed vector
      * @param speed     array of speeds: speed[FORWARD]: m/s, speed[STRAFE]: m/s, speed[THETA]: rad/s
+     * @returns true if the movement is feasible, false otherwise
      */
-    void inverseKinematics(const double* speed) const;
+    bool inverseKinematics(const double* speed) const;
 
     /**
      * This method computes and sets robot's current position from the current position and the displacement
      */
     void odometry();
+
+    /**
+     * This method returns the minimum angular distance between two angular positions
+     * @param phi1    first angle in radians; it must be in range [0, PI)
+     * @param phi2    second angle in radians; it must be in range [0, PI)
+     * @return angular distance in radians; it will be in range [0, PI]
+     */
+    static double angularDistance(double phi1, double phi2);
 
 };
 

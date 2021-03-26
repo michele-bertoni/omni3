@@ -8,6 +8,11 @@
 class MotorDriver {
 public:
     /**
+     * Pure virtual destructor
+     */
+    virtual ~MotorDriver() = 0;
+
+    /**
      * Max PWM value; feasible speed will be in [-MAX_PWM, MAX_PWM] range
      */
     static const int MAX_PWM = 255;
@@ -19,28 +24,28 @@ public:
 
     /**
      * Method for setting motor speed
-     * @param speed     integer in [-MAX_PWM, MAX_PWM] range; sign indicates motor's direction of rotation
+     * @param _speed     integer in [-MAX_PWM, MAX_PWM] range; sign indicates motor's direction of rotation
      */
-    void setSpeed(int speed) {
+    void setSpeed(int _speed) {
         /* Force speed in [-MAX_PWM, MAX_PWM] range */
-        speed = MotorDriver::rangedSpeed(speed);
+        _speed = MotorDriver::rangedSpeed(_speed);
 
         /* Update current speed */
-        this->speed = speed;
+        this->speed = _speed;
 
         /* Compute direction according to speed sign, then extract speed absolute value */
         Direction direction = Direction::RELEASED;
-        if(speed > 0) {
+        if(_speed > 0) {
             direction = Direction::FORWARDS;
         }
-        if(speed < 0) {
+        if(_speed < 0) {
             direction = Direction::BACKWARDS;
-            speed = -speed;
+            _speed = -_speed;
         }
 
         /* Set rotation direction and magnitude */
         this->setDirection(direction);
-        this->setMagnitude(speed);
+        this->setMagnitude(_speed);
     }
 
     /**

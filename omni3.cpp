@@ -1,10 +1,27 @@
 #include "omni3.h"
 
-/* public methods */
+/** Public methods */
 omni3_params_t Omni3::readStoredData(int memAddr) {
     omni3_params_t data;
     EEPROM.get(memAddr, data);
     return data;
+}
+
+void Omni3::handle() {
+    double speed[DOF] = {0.0, 0.0, 0.0};
+
+    if (!inverseKinematics(speed)) {
+        this->emergencyStop();
+        return;
+    }
+
+    double angularDisplacement[WHEELS_NUM];
+    angularDisplacement[W_RIGHT] = wheels[W_RIGHT]->handle();
+    angularDisplacement[W_BACK] = wheels[W_BACK]->handle();
+    angularDisplacement[W_LEFT] = wheels[W_LEFT]->handle();
+
+    directKinematics(angularDisplacement);
+    odometry();
 }
 
 bool Omni3::home() {
@@ -24,7 +41,13 @@ bool Omni3::home() {
     return true;
 }
 
-/* private methods */
+void Omni3::emergencyStop() {
+    for (auto & wheel : wheels) {
+        wheel->setMaxSpeed(0.0);
+    }
+}
+
+/** Private methods */
 void Omni3::setWheelsRadius (double wheelsRadius) {
     this->R = wheelsRadius;
     this->C30_R = COS30 / wheelsRadius;
@@ -53,16 +76,16 @@ void Omni3::directKinematics(const double* angularDisplacement) {
     this->displacement[THETA] = R_3L * (angularDisplacement[0] + angularDisplacement[1] + angularDisplacement[2]);
 }
 
-void Omni3::inverseKinematics(const double* speed) const {
+bool Omni3::inverseKinematics(const double* speed) const {
     const double S = C60_R * speed[STRAFE];
     const double F = C30_R * speed[FORWARD];
     const double T = L_R * speed[THETA];
 
     /* wR = cos(60°)/R * strafe + cos(30°)/R * forward - L/R * theta */
-    wheels[W_RIGHT]->setSpeed(S + F - T);
+    return wheels[W_RIGHT]->setSpeed(S + F - T) &&
 
     /* wB = cos(180°)/R * strafe - L/R * theta */
-    wheels[W_BACK]->setSpeed(C180_R * speed[STRAFE] - T);
+    wheels[W_BACK]->setSpeed(C180_R * speed[STRAFE] - T) &&
 
     /* wL = cos(60°)/R * strafe - cos(30°)/R * forward - L/R * theta */
     wheels[W_LEFT]->setSpeed(S - F - T);
@@ -74,4 +97,15 @@ void Omni3::odometry() {
     this->currentPosition[POS_X] = cos(th)*displacement[POS_X] - sin(th)*displacement[POS_Y];
     this->currentPosition[POS_Y] = sin(th)*displacement[POS_X] + cos(th)*displacement[POS_Y];
     this->currentPosition[POS_PHI] = currentPosition[POS_PHI] + displacement[THETA];
+    while (this->currentPosition[POS_PHI] >= TWO_PI) {
+        this->currentPosition[POS_PHI] -= TWO_PI;
+    }
+    while (this->currentPosition[POS_PHI] < 0.0) {
+        this->currentPosition[POS_PHI] += TWO_PI;
+    }
+}
+
+double Omni3::angularDistance(double phi1, double phi2) {
+    double angDist = abs(phi1 - phi2);
+    return angDist>PI ? TWO_PI-angDist : angDist;
 }
