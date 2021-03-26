@@ -8,20 +8,39 @@ omni3_params_t Omni3::readStoredData(int memAddr) {
 }
 
 void Omni3::handle() {
-    double speed[DOF] = {0.0, 0.0, 0.0};
+    /* Read current time */
+    unsigned long time = millis();
 
-    if (!inverseKinematics(speed)) {
-        this->emergencyStop();
-        return;
-    }
+    /* Initialize array with target strafe, forward and angular speeds */
+    double targetSpeed[DOF] = {0.0, 0.0, 0.0};
 
+    /* Compute angular displacement of each wheel */
     double angularDisplacement[WHEELS_NUM];
     angularDisplacement[W_RIGHT] = wheels[W_RIGHT]->handle();
     angularDisplacement[W_BACK] = wheels[W_BACK]->handle();
     angularDisplacement[W_LEFT] = wheels[W_LEFT]->handle();
 
+    /* From angular displacements, compute the current position of the robot */
     directKinematics(angularDisplacement);
     odometry();
+
+    double dt = (time - lastTime) * MILLIS;
+
+    /* Initialize array with current strafe, forward and angular speeds */
+    double currentSpeed[DOF];
+    currentSpeed[FORWARD] = displacement[FORWARD] / dt;
+    currentSpeed[STRAFE] = displacement[STRAFE] / dt;
+    currentSpeed[THETA] = displacement[THETA] / dt;
+
+    /* Compute target speed vector */
+    this->movements->handle(currentPosition, currentSpeed, time, targetSpeed);
+
+    if (!inverseKinematics(targetSpeed)) {
+        this->emergencyStop();
+        return;
+    }
+
+    lastTime = time;
 }
 
 bool Omni3::home() {
@@ -33,10 +52,9 @@ bool Omni3::home() {
         return false;
     }
 
-    /* Otherwise (the robot is still), set current and target positions to { 0.0, 0.0, 0.0 } and return true */
-    for (int i=0; i < DOF; i++) {
-        this->currentPosition[i] = 0.0;
-        this->targetPosition[i] = 0.0;
+    /* Otherwise (the robot is still), set current position to { 0.0, 0.0, 0.0 } and return true */
+    for (double & i : this->currentPosition) {
+        i = 0.0;
     }
     return true;
 }
@@ -103,9 +121,4 @@ void Omni3::odometry() {
     while (this->currentPosition[POS_PHI] < 0.0) {
         this->currentPosition[POS_PHI] += TWO_PI;
     }
-}
-
-double Omni3::angularDistance(double phi1, double phi2) {
-    double angDist = abs(phi1 - phi2);
-    return angDist>PI ? TWO_PI-angDist : angDist;
 }

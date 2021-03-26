@@ -161,12 +161,6 @@ private:
     double currentPosition[DOF] = {0.0, 0.0, 0.0};
 
     /**
-     * Vector storing the target position of the robot: targetPosition[X]: meters, targetPosition[Y]: meters,
-     * targetPosition[TH]: radians; positions are reset when home() method is called
-     */
-    double targetPosition[DOF] = {0.0, 0.0, 0.0};
-
-    /**
      * Vector storing the current movement of the robot: displacement[FORWARD]: meters, displacement[STRAFE]: meters,
      * displacement[ANGULAR]: radians; home() can be called only if displacement is 0; the current speed of the robot
      * can be easily computed by dividing the displacement by the time elapsed
@@ -252,14 +246,6 @@ private:
      * This method computes and sets robot's current position from the current position and the displacement
      */
     void odometry();
-
-    /**
-     * This method returns the minimum angular distance between two angular positions
-     * @param phi1    first angle in radians; it must be in range [0, PI)
-     * @param phi2    second angle in radians; it must be in range [0, PI)
-     * @return angular distance in radians; it will be in range [0, PI]
-     */
-    static double angularDistance(double phi1, double phi2);
 
 };
 

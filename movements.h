@@ -72,6 +72,18 @@ private:
          * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
          */
         virtual void getSpeed(unsigned long time, double *targetSpeed) = 0;
+
+    protected:
+        /**
+         * This method returns the minimum angular distance between two angular positions
+         * @param phi1    first angle in radians; it must be in range [0, PI)
+         * @param phi2    second angle in radians; it must be in range [0, PI)
+         * @return angular distance in radians; it will be in range [0, PI]
+         */
+        static double angularDistance(double phi1, double phi2) {
+            double angDist = abs(phi1 - phi2);
+            return angDist>PI ? TWO_PI-angDist : angDist;
+        }
     };
 
     /**
@@ -241,7 +253,7 @@ private:
             /* Compute displacements in [FORWARD, STRAFE, THETA] frame of reference */
             FiniteMovement::xyToSF(target[POS_X]-position[POS_X], target[POS_Y]-position[POS_Y],
                                    position[POS_PHI], &displacements[FORWARD], &displacements[STRAFE]);
-            displacements[THETA] = target[POS_PHI] - position[POS_PHI];
+            displacements[THETA] = Movement::angularDistance(target[POS_PHI], position[POS_PHI]);
 
             /* If displacement is inside range of tolerance, i.e. the maximum between braking space (that depends on the
                square of current speed) and a constant tolerance, the movement on the corresponding axes is finished */
@@ -332,7 +344,7 @@ private:
             /* Compute displacements in [FORWARD, STRAFE, THETA] frame of reference */
             FiniteMovement::xyToSF(target[POS_X]-position[POS_X], target[POS_Y]-position[POS_Y],
                                    position[POS_PHI], &displacements[FORWARD], &displacements[STRAFE]);
-            displacements[THETA] = target[POS_PHI] - position[POS_PHI];
+            displacements[THETA] = Movement::angularDistance(target[POS_PHI], position[POS_PHI]);
 
             /* If displacement is inside range of tolerance, i.e. the maximum between braking space (that depends on the
                square of current speed) and a constant tolerance, the movement on the corresponding axes is finished */
