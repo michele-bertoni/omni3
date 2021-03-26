@@ -87,31 +87,16 @@ private:
         /**
          * This pure virtual method must be overridden by a method that, given the current position, the space of
          * brake and the time, sets _isFinished values to true if the current movement ended for the given axes,
-         * false otherwise; if _isFinished is all composed by true values, movements schedule is shifted
+         * false otherwise; if _isFinished is all composed by true values, movements schedule is shifted;
+         * for finite movement, it's important to call isFinished method before getSpeed method
          * @param position      current position of the robot ([m, m, rad])
          * @param brakingSpace  space needed by the robot to stop ([m, m, rad])
          * @param time          current time in milliseconds
          * @return true if all movement components finished, false otherwise
          */
-        virtual bool isFinished(double *position, double *brakingSpace, unsigned long time) = 0;
+        virtual bool isFinished(const double *position, const double *brakingSpace, unsigned long time) = 0;
 
     protected:
-        /**
-         * This method computes and returns the timestamp when the movement is supposed to end, given the timestamp
-         * when the movement began and the duration of the movement
-         * @param time          current time in milliseconds
-         * @param duration      duration of the movement in seconds
-         * @return target timestamp in milliseconds when the movement is supposed to end
-         */
-        static unsigned long initializeTargetTime(unsigned long time, double duration) {
-            /* Compute target time */
-            unsigned long targetTime = time + lround(duration * TO_MILLIS);
-
-            /* Since a target time of 0 is seen as uninitialized, if result is by chance 0, it is set to 1 (1 ms of
-               difference is very small, also it is unlikely that the result is 0); finally return target time */
-            return targetTime==0 ? 1 : targetTime;
-        }
-
         /**
          * This method computes the conversion from (POS_X, POS_Y) coordinates to (FORWARD, STRAFE) coordinates
          * @param x         x component of input vector
@@ -228,33 +213,11 @@ private:
             this->target[POS_Y] = y;
             this->target[POS_PHI] = phi;
             this->_duration = duration;
-            this->targetTime = 0;
+            this->startTime = 0;
         }
 
         /**
-         * This override method, given the current position and the time, sets targetSpeed vector values
-         * so that the achieved trajectory is linear in all of its components
-         * @param time          current time in milliseconds
-         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
-         */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
-            /* If targetTime is 0 (first call of this method on this object), initialize targetTime */
-            if(this->targetTime == 0) {
-                this->targetTime = FiniteMovement::initializeTargetTime(time, this->_duration);
-            }
-
-            /* Compute delta time in seconds */
-            double dt = (targetTime - time) * MILLIS;
-
-            /* Compute speed vectors as displacement over delta time in the FORWARD, STRAFE, THETA frame of reference;
-               if that component movement is finished, speed is set to 0; this avoids oscillations */
-            targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] / dt;
-            targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] / dt;
-            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : displacements[THETA] / dt;
-        }
-
-        /**
-         * This override method, given the current position, the space of brake and the time, sets _isFinished
+         * This overriding method, given the current position, the space of brake and the time, sets _isFinished
          * values to true if the current movement ended for the given axes, false otherwise;
          * if _isFinished is all composed by true values, movements schedule is shifted
          * @param position      current position of the robot ([m, m, rad])
@@ -262,7 +225,19 @@ private:
          * @param time          current time in milliseconds
          * @return true if all movement components finished, false otherwise
          */
-        bool isFinished(double *position, double *brakingSpace, unsigned long time) override {
+        bool isFinished(const double *position, const double *brakingSpace, unsigned long time) override {
+            /* If targetTime is 0 (first call of this method on this object), initialize targetTime */
+            if(this->startTime == 0) {
+                /* Since a target time of 0 is seen as uninitialized, if result is by chance 0, it is set to 1 (1 ms of
+                   difference is very small, also it is unlikely that the result is 0) */
+                this->startTime = time!=0 ? time : 1;
+            }
+
+            /* If current duration of the movement is at least the theoretical duration, end current movement */
+            if((time - startTime) >= lround(_duration * TO_MILLIS)) {
+                return true;
+            }
+
             /* Compute displacements in [FORWARD, STRAFE, THETA] frame of reference */
             FiniteMovement::xyToSF(target[POS_X]-position[POS_X], target[POS_Y]-position[POS_Y],
                                    position[POS_PHI], &displacements[FORWARD], &displacements[STRAFE]);
@@ -284,6 +259,23 @@ private:
             return _isFinished[FORWARD] && _isFinished[STRAFE] && _isFinished[THETA];
         }
 
+        /**
+         * This overriding method, given the displacements and the time, sets targetSpeed vector values
+         * so that the achieved trajectory is linear in all of its components
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         */
+        void getSpeed(unsigned long time, double *targetSpeed) override {
+            /* Compute delta time in seconds */
+            double dt = _duration - ((time - startTime) * MILLIS);
+
+            /* Compute speed vectors as displacement over delta time in the FORWARD, STRAFE, THETA frame of reference;
+               if that component movement is finished, speed is set to 0; this avoids oscillations */
+            targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] / dt;
+            targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] / dt;
+            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : displacements[THETA] / dt;
+        }
+
     private:
         /**
          * Vector with target positions
@@ -301,9 +293,9 @@ private:
         double _duration;
 
         /**
-         * Target time the movement should finish
+         * Time when then movement started
          */
-        unsigned long targetTime;
+        unsigned long startTime;
     };
 
     /**
@@ -328,25 +320,7 @@ private:
         }
 
         /**
-         * This override method, given the current position and the time, sets targetSpeed vector values
-         * so that the achieved trajectory is linear in all of its components
-         * @param time          current time in milliseconds
-         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
-         */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
-            /* Compute normalization factor, to be multiplied to each component, in order to have a resulting speed
-               vector with the given magnitude, and the same direction as the displacement vector */
-            double normFactor = sqrtSpeedMagnitude /
-                    sqrt(displacements[FORWARD]*displacements[FORWARD] + displacements[STRAFE]*displacements[STRAFE]);
-            targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] * normFactor;
-            targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] * normFactor;
-
-            /* Compute the angular speed, by multiplying the desired magnitude to the sign of the displacement */
-            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : (displacements[THETA]>=0 ? 1 : -1)*angularSpeedMagnitude;
-        }
-
-        /**
-         * This override method, given the current position, the space of brake and the time, sets _isFinished
+         * This overriding method, given the current position, the space of brake and the time, sets _isFinished
          * values to true if the current movement ended for the given axes, false otherwise;
          * if _isFinished is all composed by true values, movements schedule is shifted
          * @param position      current position of the robot ([m, m, rad])
@@ -354,7 +328,7 @@ private:
          * @param time          current time in milliseconds
          * @return true if all movement components finished, false otherwise
          */
-        bool isFinished(double *position, double *brakingSpace, unsigned long time) override {
+        bool isFinished(const double *position, const double *brakingSpace, unsigned long time) override {
             /* Compute displacements in [FORWARD, STRAFE, THETA] frame of reference */
             FiniteMovement::xyToSF(target[POS_X]-position[POS_X], target[POS_Y]-position[POS_Y],
                                    position[POS_PHI], &displacements[FORWARD], &displacements[STRAFE]);
@@ -374,6 +348,24 @@ private:
 
             /* return true if the movement is completed for all the components */
             return _isFinished[FORWARD] && _isFinished[STRAFE] && _isFinished[THETA];
+        }
+
+        /**
+         * This overriding method, given the displacements and speeds' magnitude, sets targetSpeed vector values
+         * so that the achieved trajectory is linear in all of its components (but together they might be non-linear)
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         */
+        void getSpeed(unsigned long time, double *targetSpeed) override {
+            /* Compute normalization factor, to be multiplied to each component, in order to have a resulting speed
+               vector with the given magnitude, and the same direction as the displacement vector */
+            double normFactor = sqrtSpeedMagnitude /
+                    sqrt(displacements[FORWARD]*displacements[FORWARD] + displacements[STRAFE]*displacements[STRAFE]);
+            targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] * normFactor;
+            targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] * normFactor;
+
+            /* Compute the angular speed, by multiplying the desired magnitude to the sign of the displacement */
+            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : (displacements[THETA]>=0 ? 1 : -1)*angularSpeedMagnitude;
         }
 
     private:
@@ -399,28 +391,111 @@ private:
 
     };
 
-    class TimeSpeedLinear : public FiniteMovement {
+    /**
+     * This class describes the finite movement that makes the robot move with the requested speeds for the given time
+     */
+    class SpeedTimeLinear : public FiniteMovement {
     public:
-        void getSpeed(unsigned long time, double *targetSpeed) override {
-
+        /**
+         * Constructor of the movement described by space and time
+         * @param forward   forward speed in m/s
+         * @param strafe    strafe speed in m/s
+         * @param angular   angular speed in rad/s
+         * @param duration  duration of the movement in seconds
+         */
+        SpeedTimeLinear(double forward, double strafe, double angular, double duration) {
+            this->speed[FORWARD] = forward;
+            this->speed[STRAFE] = strafe;
+            this->speed[THETA] = angular;
+            this->_duration = duration;
+            this->startTime = 0;
         }
+
+        /**
+         * This overriding method, given the current position, the space of brake and the time, sets _isFinished
+         * values to true if the current movement ended for the given axes, false otherwise;
+         * if _isFinished is all composed by true values, movements schedule is shifted
+         * @param position      current position of the robot ([m, m, rad])
+         * @param brakingSpace  space needed by the robot to stop ([m, m, rad])
+         * @param time          current time in milliseconds
+         * @return true if all movement components finished, false otherwise
+         */
+        bool isFinished(const double *position, const double *brakingSpace, unsigned long time) override {
+            /* If targetTime is 0 (first call of this method on this object), initialize targetTime */
+            if(this->startTime == 0) {
+                /* Since a target time of 0 is seen as uninitialized, if result is by chance 0, it is set to 1 (1 ms of
+                   difference is very small, also it is unlikely that the result is 0) */
+                this->startTime = time!=0 ? time : 1;
+            }
+
+            /* If current duration of the movement is at least the theoretical duration, end current movement */
+            if((time - startTime) >= lround(_duration * TO_MILLIS)) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * This overriding method, given the target speeds, sets targetSpeed vector values to the requested ones
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         */
+        void getSpeed(unsigned long time, double *targetSpeed) override {
+            /* Speed vector components are simply equal to the requested speeds */
+            targetSpeed[FORWARD] = this->speed[FORWARD];
+            targetSpeed[STRAFE] = this->speed[STRAFE];
+            targetSpeed[THETA] = this->speed[THETA];
+        }
+
+    private:
+        /**
+         * Vector with target positions
+         */
+        double speed[DOF] {};
+
+        /**
+         * Duration of the movement in seconds
+         */
+        double _duration;
+
+        /**
+         * Target time the movement should finish
+         */
+        unsigned long startTime;
 
     };
 
+    /**
+     * This class describes the indefinite movement that makes the robot move with the requested speeds
+     */
     class SpeedIndefinite : public IndefiniteMovement {
     public:
+        /**
+         * Constructor sets speeds values
+         * @param forward   forward component of speed vector
+         * @param strafe    strafe component of speed vector
+         * @param angular   angular component of speed vector
+         */
         SpeedIndefinite(double forward, double strafe, double angular) {
             speed[FORWARD] = forward;
             speed[STRAFE] = strafe;
             speed[THETA] = angular;
         }
 
+        /**
+         * This overriding method, given the target speeds, sets targetSpeed vector values to the requested ones
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         */
         void getSpeed(unsigned long time, double *targetSpeed) override {
-            speed[FORWARD] = this->speed[FORWARD];
-            speed[STRAFE] = this->speed[STRAFE];
-            speed[THETA] = this->speed[THETA];
+            targetSpeed[FORWARD] = this->speed[FORWARD];
+            targetSpeed[STRAFE] = this->speed[STRAFE];
+            targetSpeed[THETA] = this->speed[THETA];
         }
 
+        /**
+         * Overriding method for deleting the object
+         */
         void free() override {
             delete this;
         }
@@ -432,29 +507,178 @@ private:
         double speed[DOF]{};
     };
 
+    /**
+     * Define max number of movements in movementSchedule array
+     */
     #define MAX_MOVEMENTS 10
 
+    /**
+     * Array of scheduled movements
+     */
     FiniteMovement *movementsSchedule[MAX_MOVEMENTS] = { nullptr };
 
+    /**
+     * Movement performed if *movementSchedule[0] is equal to nullptr; it's set to Still every time a new FiniteMovement
+     * is scheduled; so there is no need to call addStop(), unless last scheduled movement was an IndefiniteMovement
+     */
     IndefiniteMovement *defaultMovement = Still::getInstance();
 
+    /**
+     * Index of the first free element of the array
+     */
     uint8_t freeIndex = 0;
 
-public:
-    void addStop() {
+    /**
+     * Coefficients that, multiplied by the square of the corresponding speed component, returns the braking space
+     */
+    double frictionCoefficient[DOF]{};
+
+    /**
+     * This method sets the given IndefiniteMovement as current
+     * @param indefiniteMovement    movement to be set
+     */
+    void setIndefiniteMovement(IndefiniteMovement *indefiniteMovement) {
+        /* Unschedule current IndefiniteMovement */
         this->defaultMovement->free();
-        this->defaultMovement = Still::getInstance();
+
+        /* Set current indefinite movement */
+        this->defaultMovement = indefiniteMovement;
     }
 
-    void addConstantMovement(double forward, double strafe, double angular) {
-        this->defaultMovement->free();
-        this->defaultMovement = new SpeedIndefinite(forward, strafe, angular);
-    }
+    /**
+     * This method appends the given FiniteMovement to the schedule
+     * @param finiteMovement        movement to be appended
+     * @return true if movement was appended, false otherwise
+     */
+    bool appendFiniteMovement(FiniteMovement *finiteMovement) {
+        /* If schedule is full, delete finiteMovement object and return false */
+        if(freeIndex >= MAX_MOVEMENTS) {
+            delete finiteMovement;
+            return false;
+        }
 
-    bool addTargetPosTime(double x, double y, double phi, double duration) {
+        /* Unschedule IndefiniteMovement that may be instanced */
         addStop();
-        this->movementsSchedule[freeIndex] = new SpaceTimeLinear(x, y, phi, duration);
+
+        /* Otherwise, place finiteMovement in the schedule, increment freeIndex and return true */
+        this->movementsSchedule[freeIndex] = finiteMovement;
+        freeIndex++;
+        return true;
     }
+
+public:
+    /**
+     * Public constructor for instancing an object of class Movements
+     * @param forwardFrictionK  coefficient of friction on forward component of speed vector
+     * @param strafeFrictionK   coefficient of friction on strafe component of speed vector
+     * @param angularFrictionK  coefficient of friction on angular component of speed vector
+     */
+    Movements(double forwardFrictionK, double strafeFrictionK, double angularFrictionK) {
+        this->frictionCoefficient[FORWARD] = forwardFrictionK;
+        this->frictionCoefficient[STRAFE] = strafeFrictionK;
+        this->frictionCoefficient[THETA] = angularFrictionK;
+    }
+
+    /**
+     * Public constructor for instancing an object of class Movements without braking space compensation
+     */
+    Movements() : Movements(0.0, 0.0, 0.0) {}
+
+    /**
+     * Schedules a Still movement; this method is called every time a new FiniteMovement is scheduled, so there is no
+     * need to manually call it in order to schedule a stop, unless if last scheduled movement was an indefinite one
+     */
+    void addStop() {
+        this->setIndefiniteMovement(Still::getInstance());
+    }
+
+    /**
+     * Schedules an indefinite movement with given forward, strafe and angular speeds
+     * @param forward   requested forward speed's magnitude
+     * @param strafe    requested strafe speed's magnitude
+     * @param angular   requested angular speed's magnitude
+     */
+    void addConstantMovement(double forward, double strafe, double angular) {
+        this->setIndefiniteMovement(new SpeedIndefinite(forward, strafe, angular));
+    }
+
+    /**
+     * Schedule a finite movement that ends when position is reached or time limit is reached, whatever comes first
+     * @param x         target x position
+     * @param y         target y position
+     * @param phi       target phi position
+     * @param duration  duration of the movement
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addTargetPosTime(double x, double y, double phi, double duration) {
+        return this->appendFiniteMovement(new SpaceTimeLinear(x, y, phi, duration));
+    }
+
+    /**
+     * Schedule a finite movement that ends when position is reached or time limit is reached, whatever comes first
+     * @param x             target x position
+     * @param y             target y position
+     * @param phi           target phi position
+     * @param speedMag      positive magnitude of planar speed vector
+     * @param angularMag    positive magnitude of angular speed vector
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addTargetPosSpeed(double x, double y, double phi, double speedMag, double angularMag) {
+        return this->appendFiniteMovement(new SpaceSpeedLinear(x, y, phi, speedMag, angularMag));
+    }
+
+    /**
+     * Schedule a finite movement that ends when time limit is reached
+     * @param forward   requested forward speed's magnitude
+     * @param strafe    requested strafe speed's magnitude
+     * @param angular   requested angular speed's magnitude
+     * @param duration  duration of the movement
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addTargetSpeedTime(double forward, double strafe, double angular, double duration) {
+        return this->appendFiniteMovement(new SpeedTimeLinear(forward, strafe, angular, duration));
+    }
+
+    /**
+     * This method handles the movements: it must be called frequently, passing updated requested arguments
+     * @param currentPosition   current position of the robot ([m, m, rad])
+     * @param currentSpeed      current speed of the robot ([m/s, m/s, rad/s])
+     * @param time              current time in milliseconds
+     * @param targetSpeed       array in which this method sets computed speed vector ([FORWARD, STRAFE, THETA])
+     */
+    void handle(const double *currentPosition, const double *currentSpeed, unsigned long time, double *targetSpeed) {
+        /* If there are no scheduled movements, perform the default indefinite movement */
+        if (freeIndex <= 0) {
+            this->defaultMovement->getSpeed(time, targetSpeed);
+            return;
+        }
+
+        /* Compute brakingSpace given current speed and friction coefficients vectors */
+        double brakingSpace[DOF];
+        brakingSpace[FORWARD] = currentSpeed[FORWARD] * currentSpeed[FORWARD] * frictionCoefficient[FORWARD];
+        brakingSpace[STRAFE] = currentSpeed[STRAFE] * currentSpeed[STRAFE] * frictionCoefficient[STRAFE];
+        brakingSpace[THETA] = currentSpeed[THETA] * currentSpeed[THETA] * frictionCoefficient[THETA];
+
+        /* While current movement is finished, shift schedule of one position */
+        while(this->movementsSchedule[0]->isFinished(currentPosition, brakingSpace, time)) {
+            delete movementsSchedule[0];
+            for(int i=0; i<freeIndex-1; i++) {
+                movementsSchedule[i] = movementsSchedule[i+1];
+            }
+            freeIndex--;
+            movementsSchedule[freeIndex] = nullptr;
+        }
+
+        /* If there are no scheduled movements, perform the default indefinite movement,
+           otherwise perform current finite movement */
+        freeIndex <= 0 ? this->defaultMovement->getSpeed(time, targetSpeed) :
+                this->movementsSchedule[0]->getSpeed(time, targetSpeed);
+    }
+
+    /**
+     * Undefine max number of movements so that this define is kept private
+     */
+    #undef MAX_MOVEMENTS
 };
 
 #endif //OMNI3_MOVEMENTS_H
