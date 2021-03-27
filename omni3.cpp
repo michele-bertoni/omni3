@@ -1,6 +1,6 @@
 #include "omni3.h"
 
-/** Public methods */
+/* Public methods */
 omni3_params_t Omni3::readStoredData(int memAddr) {
     /* initialize data */
     omni3_params_t data;
@@ -72,7 +72,7 @@ void Omni3::emergencyStop() {
     }
 }
 
-/** Private methods */
+/* Private methods */
 void Omni3::setWheelsRadius (double wheelsRadius) {
     /* Set various constants */
     this->R = wheelsRadius;
