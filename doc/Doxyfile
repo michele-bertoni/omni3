@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "Arduino library for moving a 3WD omnidirectional robot
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = C:/Users/mikib/Downloads/cropped-airlab-icon-32x32.png
+PROJECT_LOGO           = C:/Users/mikib/Documents/Arduino/libraries/omni3/doc/airlab-icon.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -1249,7 +1249,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            =
+HTML_HEADER            = html_header.html
 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank doxygen will generate a standard
