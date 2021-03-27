@@ -1,0 +1,10 @@
+/**
+ @brief Documentation Omni3
+ @author Michele Bertoni michele2.bertoni@mail.polimi.it
+ @file
+ */
+
+/**
+ @mainpage Omni3
+ This is a simple demonstration of getting Doxygen output to GitHub
+ */
