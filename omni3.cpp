@@ -93,14 +93,17 @@ void Omni3::setRobotRadius (double robotRadius) {
 }
 
 void Omni3::directKinematics(const double* angularDisplacement) {
-    /* forward = tan(30°) * R * (wR - wL) */
-    this->displacement[FORWARD] = T30R * (angularDisplacement[W_RIGHT] - angularDisplacement[W_LEFT]);
+    /* forward = tan(30°)*R * (wR - wL) */
+    this->displacement[FORWARD] = T30R *
+            (angularDisplacement[W_RIGHT] - angularDisplacement[W_LEFT]);
 
     /* strafe = R/3 * (wR - 2*wB + wL) */
-    this->displacement[STRAFE] = R_3 * (angularDisplacement[W_RIGHT] - 2*angularDisplacement[1] + angularDisplacement[2]);
+    this->displacement[STRAFE] = R_3 *
+            (angularDisplacement[W_RIGHT] - 2*angularDisplacement[W_BACK] + angularDisplacement[W_LEFT]);
 
     /* theta = R/(3*L) * (wR + wB + wL) */
-    this->displacement[THETA] = R_3L * (angularDisplacement[0] + angularDisplacement[1] + angularDisplacement[2]);
+    this->displacement[THETA] = R_3L *
+            (angularDisplacement[W_RIGHT] + angularDisplacement[W_BACK] + angularDisplacement[W_LEFT]);
 }
 
 bool Omni3::inverseKinematics(const double* speed) const {
@@ -109,14 +112,14 @@ bool Omni3::inverseKinematics(const double* speed) const {
     const double F = C30_R * speed[FORWARD];
     const double T = L_R * speed[THETA];
 
-    /* wR = cos(60°)/R * strafe + cos(30°)/R * forward - L/R * theta */
-    return wheels[W_RIGHT]->setSpeed(S + F - T) &&
+    /* wR = cos(60°)/R * strafe + cos(30°)/R * forward + L/R * theta */
+    return wheels[W_RIGHT]->setSpeed(S + F + T) &&
 
-    /* wB = cos(180°)/R * strafe - L/R * theta */
-    wheels[W_BACK]->setSpeed(C180_R * speed[STRAFE] - T) &&
+    /* wB = cos(180°)/R * strafe + L/R * theta */
+    wheels[W_BACK]->setSpeed(C180_R * speed[STRAFE] + T) &&
 
-    /* wL = cos(60°)/R * strafe - cos(30°)/R * forward - L/R * theta */
-    wheels[W_LEFT]->setSpeed(S - F - T);
+    /* wL = cos(60°)/R * strafe - cos(30°)/R * forward + L/R * theta */
+    wheels[W_LEFT]->setSpeed(S - F + T);
 }
 
 void Omni3::odometry() {
