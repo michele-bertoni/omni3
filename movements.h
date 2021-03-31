@@ -51,6 +51,28 @@
 #define TO_MILLIS 1000
 
 /**
+ * This macro computes the square of a number (^2)
+ */
+#define pow2(a) ((a)*(a))
+
+/**
+ * This macro computes the signed square of a number (^2)
+ */
+#define sPow2(a) (abs((a))*(a))
+
+#define vectorsSumMag(v1,v2) (sqrt(pow2((v1))+pow2((v2))))
+
+/**
+ * This macro, given speed and angular magnitudes in any order, computes normalized magnitude of the first magnitude
+ */
+#define nSpAngMag(m,m0) (pow2((m))/(abs((m))+abs((m0))))
+
+/**
+ * This macro, given speed and angular magnitudes in any order, computes normalized magnitude of the first magnitude with sign
+ */
+#define nSpAngSMag(m,m0) (sPow2((m))/(abs((m))+abs((m0))))
+
+/**
  * This class handles movements of the robot
  */
 class Movements {
@@ -69,9 +91,10 @@ private:
          * This pure virtual method must be overridden by a method that, given the current position and the time,
          * sets targetSpeed values to the desired ones
          * @param time          current time in milliseconds
-         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @param targetSpeed   array in which target speed vector is stored
+         * @return true if targetSpeed contains normalized values, false if it's in the form [m/s, m/s, rad/s]
          */
-        virtual void getSpeed(unsigned long time, double *targetSpeed) = 0;
+        virtual bool getSpeed(unsigned long time, double *targetSpeed) = 0;
 
     protected:
         /**
@@ -169,12 +192,15 @@ private:
          * This method, independently from the arguments, will set targetSpeed to [0.0, 0.0, 0.0]
          * @param position      current position of the robot ([m, m, rad])
          * @param time          current time in milliseconds
-         * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @param targetSpeed   array in which target normalized speed vector is stored
+         * @return true, since targetSpeed array is normalized
          */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
             targetSpeed[FORWARD] = 0.0;
             targetSpeed[STRAFE] = 0.0;
             targetSpeed[THETA] = 0.0;
+
+            return true;
         }
 
         /**
@@ -276,8 +302,9 @@ private:
          * so that the achieved trajectory is linear in all of its components
          * @param time          current time in milliseconds
          * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @return false, since targetSpeed array is not normalized
          */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
             /* Compute delta time in seconds */
             double dt = _duration - ((time - startTime) * MILLIS);
 
@@ -286,6 +313,8 @@ private:
             targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] / dt;
             targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] / dt;
             targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : displacements[THETA] / dt;
+
+            return false;
         }
 
     private:
@@ -316,7 +345,7 @@ private:
     class SpaceSpeedLinear : public FiniteMovement {
     public:
         /**
-         * Constructor of the movement described by space and time
+         * Constructor of the movement described by space and speed
          * @param x             target x coordinate in meters
          * @param y             target y coordinate in meters
          * @param phi           target phi coordinate in radians
@@ -327,7 +356,7 @@ private:
             this->target[POS_X] = x;
             this->target[POS_Y] = y;
             this->target[POS_PHI] = phi;
-            this->sqrtSpeedMagnitude = sqrt(speedMag);
+            this->speedMagnitude = speedMag;
             this->angularSpeedMagnitude = angularMag;
         }
 
@@ -367,17 +396,19 @@ private:
          * so that the achieved trajectory is linear in all of its components (but together they might be non-linear)
          * @param time          current time in milliseconds
          * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @return false, since targetSpeed array is not normalized
          */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
             /* Compute normalization factor, to be multiplied to each component, in order to have a resulting speed
                vector with the given magnitude, and the same direction as the displacement vector */
-            double normFactor = sqrtSpeedMagnitude /
-                    sqrt(displacements[FORWARD]*displacements[FORWARD] + displacements[STRAFE]*displacements[STRAFE]);
+            double normFactor = speedMagnitude / vectorsSumMag(displacements[FORWARD], displacements[STRAFE]);
             targetSpeed[FORWARD] = _isFinished[FORWARD] ? 0.0 : displacements[FORWARD] * normFactor;
             targetSpeed[STRAFE] = _isFinished[STRAFE] ? 0.0 : displacements[STRAFE] * normFactor;
 
             /* Compute the angular speed, by multiplying the desired magnitude to the sign of the displacement */
-            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : (displacements[THETA]>=0 ? 1 : -1)*angularSpeedMagnitude;
+            targetSpeed[THETA] = _isFinished[THETA] ? 0.0 : (displacements[THETA]>=0 ? 1 : -1) * angularSpeedMagnitude;
+
+            return false;
         }
 
     private:
@@ -394,7 +425,7 @@ private:
         /**
          * Square root of the magnitude of the speed vector composed by forward and strafe vectors
          */
-        double sqrtSpeedMagnitude;
+        double speedMagnitude;
 
         /**
          * Magnitude of the angular speed in rad/s
@@ -404,12 +435,43 @@ private:
     };
 
     /**
+     * This class describes the finite movement that brings the robot to the requested position with the given
+     * normalized speeds
+     */
+    class SpaceNormSpeedLinear : public SpaceSpeedLinear {
+    public:
+        /**
+         * Constructor of the movement described by space and normalized speed
+         * @param x             target x coordinate in meters
+         * @param y             target y coordinate in meters
+         * @param phi           target phi coordinate in radians
+         * @param speedNorm     norm of planar speed vector (it must be in range [0.0, 1.0])
+         * @param angularNorm   norm of angular speed vector (it must be in range [0.0, 1.0])
+         */
+        SpaceNormSpeedLinear(double x, double y, double phi, double speedNorm, double angularNorm) :
+                SpaceSpeedLinear(x, y, phi, nSpAngMag(speedNorm, angularNorm),
+                                 nSpAngMag(angularNorm, speedNorm)) {}
+
+        /**
+         * This overriding method, given the displacements and speeds' norm, sets targetSpeed vector values
+         * so that the achieved trajectory is linear in all of its components (but together they might be non-linear)
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target normalized speed vector is stored
+         * @return true, since targetSpeed array is normalized
+         */
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
+            SpaceSpeedLinear::getSpeed(time, targetSpeed);
+            return true;
+        }
+    };
+
+    /**
      * This class describes the finite movement that makes the robot move with the requested speeds for the given time
      */
     class SpeedTimeLinear : public FiniteMovement {
     public:
         /**
-         * Constructor of the movement described by space and time
+         * Constructor of the movement described by speed and time
          * @param forward   forward speed in m/s
          * @param strafe    strafe speed in m/s
          * @param angular   angular speed in rad/s
@@ -451,12 +513,15 @@ private:
          * This overriding method, given the target speeds, sets targetSpeed vector values to the requested ones
          * @param time          current time in milliseconds
          * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @return false, since targetSpeed array is not normalized
          */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
             /* Speed vector components are simply equal to the requested speeds */
             targetSpeed[FORWARD] = this->speed[FORWARD];
             targetSpeed[STRAFE] = this->speed[STRAFE];
             targetSpeed[THETA] = this->speed[THETA];
+
+            return false;
         }
 
     private:
@@ -478,12 +543,46 @@ private:
     };
 
     /**
+     * This class describes the finite movement that makes the robot move with the requested normalized speeds for the
+     * given time
+     */
+    class NormSpeedTimeLinear : public SpeedTimeLinear {
+    public:
+
+        /**
+         * Constructor of the movement described by normalized speed and time
+         * @param speedNorm     norm of planar speed vector (it must be in range [0.0, 1.0])
+         * @param theta         angle defining the direction of the speed vector
+         * @param angularNorm   norm of angular speed vector (it must be in range [-1.0, 1.0])
+         * @param duration  duration of the movement in seconds
+         */
+        NormSpeedTimeLinear(double speedNorm, double theta, double angularNorm, double duration) :
+        SpeedTimeLinear(nSpAngMag(speedNorm, angularNorm) * cos(theta),
+                        nSpAngMag(speedNorm, angularNorm) * sin(theta),
+                        nSpAngSMag(angularNorm, speedNorm),
+                        duration
+                        ) {}
+
+        /**
+         * This overriding method, given the normalized target speeds, sets targetSpeed vector values to the requested
+         * ones
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target normalized speed vector is stored
+         * @return true, since targetSpeed array is normalized
+         */
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
+            SpeedTimeLinear::getSpeed(time, targetSpeed);
+            return true;
+        }
+    };
+
+    /**
      * This class describes the indefinite movement that makes the robot move with the requested speeds
      */
     class SpeedIndefinite : public IndefiniteMovement {
     public:
         /**
-         * Constructor sets speeds values
+         * Constructor of the indefinite movement described by speed
          * @param forward   forward component of speed vector
          * @param strafe    strafe component of speed vector
          * @param angular   angular component of speed vector
@@ -498,11 +597,13 @@ private:
          * This overriding method, given the target speeds, sets targetSpeed vector values to the requested ones
          * @param time          current time in milliseconds
          * @param targetSpeed   array in which target speed vector ([m/s, m/s, rad/s]) is stored
+         * @return false, since targetSpeed array is not normalized
          */
-        void getSpeed(unsigned long time, double *targetSpeed) override {
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
             targetSpeed[FORWARD] = this->speed[FORWARD];
             targetSpeed[STRAFE] = this->speed[STRAFE];
             targetSpeed[THETA] = this->speed[THETA];
+            return false;
         }
 
         /**
@@ -517,6 +618,36 @@ private:
          * Target forward, strafe and angular speeds
          */
         double speed[DOF]{};
+    };
+
+    /**
+     * This class describes the indefinite movement that makes the robot move with the requested normalized speeds
+     */
+    class NormSpeedIndefinite : public SpeedIndefinite {
+    public:
+        /**
+         * Constructor of the indefinite movement described by normalized speed
+         * @param speedNorm     norm of planar speed vector (it must be in range [0.0, 1.0])
+         * @param theta         angle defining the direction of the speed vector
+         * @param angularNorm   norm of angular speed vector (it must be in range [-1.0, 1.0])
+         */
+        NormSpeedIndefinite(double speedNorm, double theta, double angularNorm) :
+        SpeedIndefinite(nSpAngMag(speedNorm, angularNorm) * cos(theta),
+                        nSpAngMag(speedNorm, angularNorm) * sin(theta),
+                        nSpAngSMag(angularNorm, speedNorm)
+                        ) {}
+
+        /**
+         * This overriding method, given the target normalized speeds, sets targetSpeed vector values to the requested
+         * ones
+         * @param time          current time in milliseconds
+         * @param targetSpeed   array in which target normalized speed vector is stored
+         * @return true, since targetSpeed array is normalized
+         */
+        bool getSpeed(unsigned long time, double *targetSpeed) override {
+            SpeedIndefinite::getSpeed(time, targetSpeed);
+            return true;
+        }
     };
 
     /**
@@ -610,8 +741,19 @@ public:
      * @param strafe    requested strafe speed's magnitude
      * @param angular   requested angular speed's magnitude
      */
-    void addConstantMovement(double forward, double strafe, double angular) {
+    void addConstantSpeedMovement(double forward, double strafe, double angular) {
         this->setIndefiniteMovement(new SpeedIndefinite(forward, strafe, angular));
+    }
+
+    /**
+     * Schedules an indefinite movement with given normalized planar and angular speeds
+     * @param speedNorm     requested norm of planar speed vector (it must be in range [0.0, 1.0])
+     * @param theta         requested angle defining the direction of the speed vector
+     * @param angularNorm   requested norm of angular speed vector (it must be in range [-1.0, 1.0])
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addConstantNormSpeedMovement(double speedNorm, double theta, double angularNorm) {
+        this->setIndefiniteMovement(new NormSpeedIndefinite(speedNorm, theta, angularNorm));
     }
 
     /**
@@ -631,12 +773,28 @@ public:
      * @param x             target x position
      * @param y             target y position
      * @param phi           target phi position
-     * @param speedMag      positive magnitude of planar speed vector
-     * @param angularMag    positive magnitude of angular speed vector
+     * @param speedMag      requested positive magnitude of planar speed vector
+     * @param angularMag    requested positive magnitude of angular speed vector
      * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
      */
     bool addTargetPosSpeed(double x, double y, double phi, double speedMag, double angularMag) {
         return this->appendFiniteMovement(new SpaceSpeedLinear(x, y, phi, speedMag, angularMag));
+    }
+
+    /**
+     * Schedule a finite movement that ends when position is reached or time limit is reached, whatever comes first
+     * @param x             target x position
+     * @param y             target y position
+     * @param phi           target phi position
+     * @param speedNorm     requested norm of planar speed vector (it must be in range [0.0, 1.0])
+     * @param angularNorm   requested norm of angular speed vector (it must be in range [0.0, 1.0])
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addTargetPosNormSpeed(double x, double y, double phi, double speedNorm, double angularNorm) {
+        if(speedNorm < 0.0 || speedNorm > 1.0 || angularNorm < 0.0 || angularNorm > 1.0) {
+            return false;
+        }
+        return this->appendFiniteMovement(new SpaceNormSpeedLinear(x, y, phi, speedNorm, angularNorm));
     }
 
     /**
@@ -652,24 +810,36 @@ public:
     }
 
     /**
+     * Schedule a finite movement that ends when time limit is reached
+     * @param speedNorm     requested norm of planar speed vector (it must be in range [0.0, 1.0])
+     * @param theta         requested angle defining the direction of the speed vector
+     * @param angularNorm   requested norm of angular speed vector (it must be in range [-1.0, 1.0])
+     * @param duration      duration of the movement
+     * @return boolean indicating whether the movement was scheduled or not (i.e. because schedule is full)
+     */
+    bool addTargetNormSpeedTime(double speedNorm, double theta, double angularNorm, double duration) {
+        return this->appendFiniteMovement(new NormSpeedTimeLinear(speedNorm, theta, angularNorm, duration));
+    }
+
+    /**
      * This method handles the movements: it must be called frequently, passing updated requested arguments
      * @param currentPosition   current position of the robot ([m, m, rad])
      * @param currentSpeed      current speed of the robot ([m/s, m/s, rad/s])
      * @param time              current time in milliseconds
      * @param targetSpeed       array in which this method sets computed speed vector ([FORWARD, STRAFE, THETA])
+     * @return true if targetSpeed contains normalized values, false if it's in the form [m/s, m/s, rad/s]
      */
-    void handle(const double *currentPosition, const double *currentSpeed, unsigned long time, double *targetSpeed) {
+    bool handle(const double *currentPosition, const double *currentSpeed, unsigned long time, double *targetSpeed) {
         /* If there are no scheduled movements, perform the default indefinite movement */
         if (freeIndex <= 0) {
-            this->defaultMovement->getSpeed(time, targetSpeed);
-            return;
+            return this->defaultMovement->getSpeed(time, targetSpeed);
         }
 
         /* Compute brakingSpace given current speed and friction coefficients vectors */
         double brakingSpace[DOF];
-        brakingSpace[FORWARD] = currentSpeed[FORWARD] * currentSpeed[FORWARD] * frictionCoefficient[FORWARD];
-        brakingSpace[STRAFE] = currentSpeed[STRAFE] * currentSpeed[STRAFE] * frictionCoefficient[STRAFE];
-        brakingSpace[THETA] = currentSpeed[THETA] * currentSpeed[THETA] * frictionCoefficient[THETA];
+        brakingSpace[FORWARD] = pow2(currentSpeed[FORWARD]) * frictionCoefficient[FORWARD];
+        brakingSpace[STRAFE] = pow2(currentSpeed[STRAFE]) * frictionCoefficient[STRAFE];
+        brakingSpace[THETA] = pow2(currentSpeed[THETA]) * frictionCoefficient[THETA];
 
         /* While current movement is finished, shift schedule of one position */
         while(this->movementsSchedule[0]->isFinished(currentPosition, brakingSpace, time)) {
@@ -683,7 +853,7 @@ public:
 
         /* If there are no scheduled movements, perform the default indefinite movement,
            otherwise perform current finite movement */
-        freeIndex <= 0 ? this->defaultMovement->getSpeed(time, targetSpeed) :
+        return freeIndex <= 0 ? this->defaultMovement->getSpeed(time, targetSpeed) :
                 this->movementsSchedule[0]->getSpeed(time, targetSpeed);
     }
 
@@ -692,5 +862,8 @@ public:
      */
     #undef MAX_MOVEMENTS
 };
+
+#undef pow2
+#undef vectorsSumMag
 
 #endif //OMNI3_MOVEMENTS_H

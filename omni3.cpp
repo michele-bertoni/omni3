@@ -37,13 +37,13 @@ void Omni3::handle() {
     currentSpeed[THETA] = displacement[THETA] / dt;
 
     /* Compute target speed vector */
-    this->movements->handle(currentPosition, currentSpeed, time, targetSpeed);
+    bool isNormalized = this->movements->handle(currentPosition, currentSpeed, time, targetSpeed);
 
     /* Update lastTime with current time */
     lastTime = time;
 
     /* Compute inverse kinematics, requesting speeds to the motors: if some fails, emergency stop the robot */
-    if (!inverseKinematics(targetSpeed)) {
+    if (isNormalized ? !normalizedInverseKinematics(targetSpeed) : !inverseKinematics(targetSpeed)) {
         this->emergencyStop();
         return;
     }
@@ -77,7 +77,7 @@ void Omni3::setWheelsRadius (double wheelsRadius) {
     /* Set various constants */
     this->R = wheelsRadius;
     this->C30_R = COS30 / wheelsRadius;
-    this->C60_R = COS60 / wheelsRadius;
+    this->S30_R = SIN30 / wheelsRadius;
     this->C180_R = COS180 / wheelsRadius;
     this->T30R = TAN30 * wheelsRadius;
     this->R_3 = wheelsRadius / 3;
@@ -108,18 +108,34 @@ void Omni3::directKinematics(const double* angularDisplacement) {
 
 bool Omni3::inverseKinematics(const double* speed) const {
     /* Compute S, F and T components */
-    const double S = C60_R * speed[STRAFE];
+    const double S = S30_R * speed[STRAFE];
     const double F = C30_R * speed[FORWARD];
     const double T = L_R * speed[THETA];
 
-    /* wR = cos(60°)/R * strafe + cos(30°)/R * forward + L/R * theta */
+    /* wR = sin(30°)/R * strafe + cos(30°)/R * forward + L/R * theta */
     return wheels[W_RIGHT]->setSpeed(S + F + T) &&
 
     /* wB = cos(180°)/R * strafe + L/R * theta */
-    wheels[W_BACK]->setSpeed(C180_R * speed[STRAFE] + T) &&
+    wheels[W_BACK]->setSpeed(C180_R*speed[STRAFE] + T) &&
 
-    /* wL = cos(60°)/R * strafe - cos(30°)/R * forward + L/R * theta */
+    /* wL = sin(30°)/R * strafe - cos(30°)/R * forward + L/R * theta */
     wheels[W_LEFT]->setSpeed(S - F + T);
+}
+
+bool Omni3::normalizedInverseKinematics(const double* speed) const {
+    /* Compute S, F and T components */
+    const double S = SIN30 * speed[STRAFE];
+    const double F = COS30 * speed[FORWARD];
+    const double T = speed[THETA];
+
+    /* wR = sin(30°)*strafe + cos(30°)*forward + theta */
+    return wheels[W_RIGHT]->setNormalizedSpeed(S + F + T) &&
+
+    /* wB = cos(180°)*strafe + theta */
+    wheels[W_BACK]->setNormalizedSpeed(COS180*speed[STRAFE] + T) &&
+
+    /* wL = sin(30°)*strafe - cos(30°)*forward + theta */
+    wheels[W_LEFT]->setNormalizedSpeed(S - F + T);
 }
 
 void Omni3::odometry() {

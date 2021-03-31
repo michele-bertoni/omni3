@@ -43,9 +43,9 @@
 #define COS30 0.86602540
 
 /**
- * Cosine of 60 degrees, or PI/3
+ * Cosine of 30 degrees, or PI/6
  */
-#define COS60 0.5
+#define SIN30 0.5
 
 /**
  * Cosine of 180 degrees, or PI
@@ -188,9 +188,9 @@ private:
     double C30_R = 1.0;
 
     /**
-     * Cosine of 60 degrees divided by wheels' radius
+     * Sine of 30 degrees divided by wheels' radius
      */
-    double C60_R = 1.0;
+    double S30_R = 1.0;
 
     /**
      * Cosine of 180 degrees divided by wheels' radius
@@ -241,6 +241,15 @@ private:
      * @returns true if the movement is feasible, false otherwise
      */
     bool inverseKinematics(const double* speed) const;
+
+    /**
+     * This method computes and sets wheels' angular speeds, given the desired robot normalized speed vector;
+     * @param speed     array of speeds: speed[FORWARD]: [-1, 1], speed[STRAFE]: [1, 1], speed[THETA]: [-1, 1]
+     *                  if mP is the magnitude of forward and strafe components' sum vector, mP must be in range [0, 1];
+     *                  also, mP + abs(theta) must be in range [0, 1]
+     * @returns true if the movement is feasible, false otherwise
+     */
+    bool normalizedInverseKinematics(const double* speed) const;
 
     /**
      * This method computes and sets robot's current position from the current position and the displacement
