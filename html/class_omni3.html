@@ -109,6 +109,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ae70629a6d7bd94cc3994a00450e914fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a561f05d7409aea6bc3cd33a7f3854220"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a561f05d7409aea6bc3cd33a7f3854220">inverseKinematics</a> (const double *speed) const</td></tr>
 <tr class="separator:a561f05d7409aea6bc3cd33a7f3854220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad860641d93bcc01a8bd4a246c55dbd8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#ad860641d93bcc01a8bd4a246c55dbd8d">normalizedInverseKinematics</a> (const double *speed) const</td></tr>
+<tr class="separator:ad860641d93bcc01a8bd4a246c55dbd8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a590b4e7a6f29454f1594cd2d283555d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a590b4e7a6f29454f1594cd2d283555d9">odometry</a> ()</td></tr>
 <tr class="separator:a590b4e7a6f29454f1594cd2d283555d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -130,8 +132,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aac3783fcd8a493f76b98ce5d9456a825"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acac6e283d6ffd9aad2f69303030e184e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#acac6e283d6ffd9aad2f69303030e184e">C30_R</a> = 1.0</td></tr>
 <tr class="separator:acac6e283d6ffd9aad2f69303030e184e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e51644d0b2d3313fc25f1b879aacb1f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a3e51644d0b2d3313fc25f1b879aacb1f">C60_R</a> = 1.0</td></tr>
-<tr class="separator:a3e51644d0b2d3313fc25f1b879aacb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee2d1de99df6e4a0c1111100c40297f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a1ee2d1de99df6e4a0c1111100c40297f">S30_R</a> = 1.0</td></tr>
+<tr class="separator:a1ee2d1de99df6e4a0c1111100c40297f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dbde2075605b687bdb4a5829d06fe38"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a1dbde2075605b687bdb4a5829d06fe38">C180_R</a> = 1.0</td></tr>
 <tr class="separator:a1dbde2075605b687bdb4a5829d06fe38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87f6f994cae1a6c8ce935eccc73a5cdf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_omni3.html#a87f6f994cae1a6c8ce935eccc73a5cdf">T30R</a> = 1.0</td></tr>
@@ -390,6 +392,39 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad860641d93bcc01a8bd4a246c55dbd8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad860641d93bcc01a8bd4a246c55dbd8d">&#9670;&nbsp;</a></span>normalizedInverseKinematics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Omni3::normalizedInverseKinematics </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>speed</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method computes and sets wheels' angular speeds, given the desired robot normalized speed vector; </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speed</td><td>array of speeds: speed[FORWARD]: [-1, 1], speed[STRAFE]: [1, 1], speed[THETA]: [-1, 1] if mP is the magnitude of forward and strafe components' sum vector, mP must be in range [0, 1]; also, mP + abs(theta) must be in range [0, 1] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the movement is feasible, false otherwise </dd></dl>
+
+</div>
+</div>
 <a id="a590b4e7a6f29454f1594cd2d283555d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a590b4e7a6f29454f1594cd2d283555d9">&#9670;&nbsp;</a></span>odometry()</h2>
 
@@ -557,29 +592,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Cosine of 30 degrees divided by wheels' radius </p>
-
-</div>
-</div>
-<a id="a3e51644d0b2d3313fc25f1b879aacb1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e51644d0b2d3313fc25f1b879aacb1f">&#9670;&nbsp;</a></span>C60_R</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double Omni3::C60_R = 1.0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Cosine of 60 degrees divided by wheels' radius </p>
 
 </div>
 </div>
@@ -786,6 +798,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Wheels' radius divided by 3 times robot's radius </p>
+
+</div>
+</div>
+<a id="a1ee2d1de99df6e4a0c1111100c40297f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ee2d1de99df6e4a0c1111100c40297f">&#9670;&nbsp;</a></span>S30_R</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Omni3::S30_R = 1.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sine of 30 degrees divided by wheels' radius </p>
 
 </div>
 </div>

@@ -95,7 +95,7 @@ $(function() {
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="omni3_8h.html#a1a3d055509602c2fefc673b53ea34673">   43</a></span>&#160;<span class="preprocessor">#define COS30 0.86602540</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="omni3_8h.html#a1420de17210866c65d19ff685c7a113c">   48</a></span>&#160;<span class="preprocessor">#define COS60 0.5</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="omni3_8h.html#a8918e0fd666a183647995f1146aa4bed">   48</a></span>&#160;<span class="preprocessor">#define SIN30 0.5</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="omni3_8h.html#a3d75883b53a7f995925def493a747866">   53</a></span>&#160;<span class="preprocessor">#define COS180 -1.0</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
@@ -159,7 +159,7 @@ $(function() {
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
 <div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="class_omni3.html#acac6e283d6ffd9aad2f69303030e184e">  188</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_omni3.html#acac6e283d6ffd9aad2f69303030e184e">C30_R</a> = 1.0;</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="class_omni3.html#a3e51644d0b2d3313fc25f1b879aacb1f">  193</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_omni3.html#a3e51644d0b2d3313fc25f1b879aacb1f">C60_R</a> = 1.0;</div>
+<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="class_omni3.html#a1ee2d1de99df6e4a0c1111100c40297f">  193</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_omni3.html#a1ee2d1de99df6e4a0c1111100c40297f">S30_R</a> = 1.0;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
 <div class="line"><a name="l00198"></a><span class="lineno"><a class="line" href="class_omni3.html#a1dbde2075605b687bdb4a5829d06fe38">  198</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_omni3.html#a1dbde2075605b687bdb4a5829d06fe38">C180_R</a> = 1.0;</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
@@ -179,26 +179,28 @@ $(function() {
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_omni3.html#a561f05d7409aea6bc3cd33a7f3854220">inverseKinematics</a>(<span class="keyword">const</span> <span class="keywordtype">double</span>* speed) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_omni3.html#a590b4e7a6f29454f1594cd2d283555d9">odometry</a>();</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;};</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_omni3.html#ad860641d93bcc01a8bd4a246c55dbd8d">normalizedInverseKinematics</a>(<span class="keyword">const</span> <span class="keywordtype">double</span>* speed) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_omni3.html#a590b4e7a6f29454f1594cd2d283555d9">odometry</a>();</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;};</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="a_m_d_d3_a_8h_html"><div class="ttname"><a href="_m_d_d3_a_8h.html">MDD3A.h</a></div></div>
 <div class="ttc" id="a_m_r001004_8h_html"><div class="ttname"><a href="_m_r001004_8h.html">MR001004.h</a></div></div>
-<div class="ttc" id="aclass_movements_html"><div class="ttname"><a href="class_movements.html">Movements</a></div><div class="ttdef"><b>Definition:</b> movements.h:56</div></div>
+<div class="ttc" id="aclass_movements_html"><div class="ttname"><a href="class_movements.html">Movements</a></div><div class="ttdef"><b>Definition:</b> movements.h:78</div></div>
 <div class="ttc" id="aclass_omni3_html"><div class="ttname"><a href="class_omni3.html">Omni3</a></div><div class="ttdef"><b>Definition:</b> omni3.h:80</div></div>
 <div class="ttc" id="aclass_omni3_html_a0fde457957be1552f8932bbd57652a07"><div class="ttname"><a href="class_omni3.html#a0fde457957be1552f8932bbd57652a07">Omni3::L_R</a></div><div class="ttdeci">double L_R</div><div class="ttdef"><b>Definition:</b> omni3.h:213</div></div>
 <div class="ttc" id="aclass_omni3_html_a171f909f241e5ec795177980bc679ed8"><div class="ttname"><a href="class_omni3.html#a171f909f241e5ec795177980bc679ed8">Omni3::wheels</a></div><div class="ttdeci">Wheel * wheels[WHEELS_NUM]</div><div class="ttdef"><b>Definition:</b> omni3.h:150</div></div>
 <div class="ttc" id="aclass_omni3_html_a1dbde2075605b687bdb4a5829d06fe38"><div class="ttname"><a href="class_omni3.html#a1dbde2075605b687bdb4a5829d06fe38">Omni3::C180_R</a></div><div class="ttdeci">double C180_R</div><div class="ttdef"><b>Definition:</b> omni3.h:198</div></div>
+<div class="ttc" id="aclass_omni3_html_a1ee2d1de99df6e4a0c1111100c40297f"><div class="ttname"><a href="class_omni3.html#a1ee2d1de99df6e4a0c1111100c40297f">Omni3::S30_R</a></div><div class="ttdeci">double S30_R</div><div class="ttdef"><b>Definition:</b> omni3.h:193</div></div>
 <div class="ttc" id="aclass_omni3_html_a2470beba68c395e73eb07e2a8144fbdb"><div class="ttname"><a href="class_omni3.html#a2470beba68c395e73eb07e2a8144fbdb">Omni3::R</a></div><div class="ttdeci">double R</div><div class="ttdef"><b>Definition:</b> omni3.h:178</div></div>
 <div class="ttc" id="aclass_omni3_html_a26cad2c82dc4ba0c8aa0c25d78151c89"><div class="ttname"><a href="class_omni3.html#a26cad2c82dc4ba0c8aa0c25d78151c89">Omni3::Omni3</a></div><div class="ttdeci">Omni3(Wheel *rightWheel, Wheel *backWheel, Wheel *leftWheel, Movements *movements, omni3_params_t parameters)</div><div class="ttdef"><b>Definition:</b> omni3.h:89</div></div>
-<div class="ttc" id="aclass_omni3_html_a3e51644d0b2d3313fc25f1b879aacb1f"><div class="ttname"><a href="class_omni3.html#a3e51644d0b2d3313fc25f1b879aacb1f">Omni3::C60_R</a></div><div class="ttdeci">double C60_R</div><div class="ttdef"><b>Definition:</b> omni3.h:193</div></div>
 <div class="ttc" id="aclass_omni3_html_a4fed51137906b6304d071096bba898a8"><div class="ttname"><a href="class_omni3.html#a4fed51137906b6304d071096bba898a8">Omni3::home</a></div><div class="ttdeci">bool home()</div><div class="ttdef"><b>Definition:</b> omni3.cpp:52</div></div>
 <div class="ttc" id="aclass_omni3_html_a521ad9fda5ef50ba2ed8e1cd77d2bf5e"><div class="ttname"><a href="class_omni3.html#a521ad9fda5ef50ba2ed8e1cd77d2bf5e">Omni3::Omni3</a></div><div class="ttdeci">Omni3(Wheel *rightWheel, Wheel *backWheel, Wheel *leftWheel, Movements *movements, int memAddr)</div><div class="ttdef"><b>Definition:</b> omni3.h:116</div></div>
-<div class="ttc" id="aclass_omni3_html_a561f05d7409aea6bc3cd33a7f3854220"><div class="ttname"><a href="class_omni3.html#a561f05d7409aea6bc3cd33a7f3854220">Omni3::inverseKinematics</a></div><div class="ttdeci">bool inverseKinematics(const double *speed) const</div><div class="ttdef"><b>Definition:</b> omni3.cpp:106</div></div>
-<div class="ttc" id="aclass_omni3_html_a590b4e7a6f29454f1594cd2d283555d9"><div class="ttname"><a href="class_omni3.html#a590b4e7a6f29454f1594cd2d283555d9">Omni3::odometry</a></div><div class="ttdeci">void odometry()</div><div class="ttdef"><b>Definition:</b> omni3.cpp:122</div></div>
+<div class="ttc" id="aclass_omni3_html_a561f05d7409aea6bc3cd33a7f3854220"><div class="ttname"><a href="class_omni3.html#a561f05d7409aea6bc3cd33a7f3854220">Omni3::inverseKinematics</a></div><div class="ttdeci">bool inverseKinematics(const double *speed) const</div><div class="ttdef"><b>Definition:</b> omni3.cpp:109</div></div>
+<div class="ttc" id="aclass_omni3_html_a590b4e7a6f29454f1594cd2d283555d9"><div class="ttname"><a href="class_omni3.html#a590b4e7a6f29454f1594cd2d283555d9">Omni3::odometry</a></div><div class="ttdeci">void odometry()</div><div class="ttdef"><b>Definition:</b> omni3.cpp:141</div></div>
 <div class="ttc" id="aclass_omni3_html_a70732bb841e2e58faeae9887f072ad88"><div class="ttname"><a href="class_omni3.html#a70732bb841e2e58faeae9887f072ad88">Omni3::setWheelsRadius</a></div><div class="ttdeci">void setWheelsRadius(double wheelsRadius)</div><div class="ttdef"><b>Definition:</b> omni3.cpp:76</div></div>
 <div class="ttc" id="aclass_omni3_html_a87f6f994cae1a6c8ce935eccc73a5cdf"><div class="ttname"><a href="class_omni3.html#a87f6f994cae1a6c8ce935eccc73a5cdf">Omni3::T30R</a></div><div class="ttdeci">double T30R</div><div class="ttdef"><b>Definition:</b> omni3.h:203</div></div>
 <div class="ttc" id="aclass_omni3_html_a95c50c0f2ebd98e68ca82ecd59877a53"><div class="ttname"><a href="class_omni3.html#a95c50c0f2ebd98e68ca82ecd59877a53">Omni3::handle</a></div><div class="ttdeci">void handle()</div><div class="ttdef"><b>Definition:</b> omni3.cpp:13</div></div>
@@ -209,6 +211,7 @@ $(function() {
 <div class="ttc" id="aclass_omni3_html_acac6e283d6ffd9aad2f69303030e184e"><div class="ttname"><a href="class_omni3.html#acac6e283d6ffd9aad2f69303030e184e">Omni3::C30_R</a></div><div class="ttdeci">double C30_R</div><div class="ttdef"><b>Definition:</b> omni3.h:188</div></div>
 <div class="ttc" id="aclass_omni3_html_ad2321a021f00bcb33202710da34df75d"><div class="ttname"><a href="class_omni3.html#ad2321a021f00bcb33202710da34df75d">Omni3::currentPosition</a></div><div class="ttdeci">double currentPosition[DOF]</div><div class="ttdef"><b>Definition:</b> omni3.h:161</div></div>
 <div class="ttc" id="aclass_omni3_html_ad4486dd3236d37e47a1a3a200de7a2fe"><div class="ttname"><a href="class_omni3.html#ad4486dd3236d37e47a1a3a200de7a2fe">Omni3::lastTime</a></div><div class="ttdeci">unsigned long lastTime</div><div class="ttdef"><b>Definition:</b> omni3.h:173</div></div>
+<div class="ttc" id="aclass_omni3_html_ad860641d93bcc01a8bd4a246c55dbd8d"><div class="ttname"><a href="class_omni3.html#ad860641d93bcc01a8bd4a246c55dbd8d">Omni3::normalizedInverseKinematics</a></div><div class="ttdeci">bool normalizedInverseKinematics(const double *speed) const</div><div class="ttdef"><b>Definition:</b> omni3.cpp:125</div></div>
 <div class="ttc" id="aclass_omni3_html_ada4a291b0b76ed612a0ef5bd74a48ca0"><div class="ttname"><a href="class_omni3.html#ada4a291b0b76ed612a0ef5bd74a48ca0">Omni3::readStoredData</a></div><div class="ttdeci">static omni3_params_t readStoredData(int memAddr)</div><div class="ttdef"><b>Definition:</b> omni3.cpp:4</div></div>
 <div class="ttc" id="aclass_omni3_html_adeacd2922c5e64ff584674b71e1ba0f7"><div class="ttname"><a href="class_omni3.html#adeacd2922c5e64ff584674b71e1ba0f7">Omni3::setRobotRadius</a></div><div class="ttdeci">void setRobotRadius(double robotRadius)</div><div class="ttdef"><b>Definition:</b> omni3.cpp:88</div></div>
 <div class="ttc" id="aclass_omni3_html_ae0441ed967d51c0af373ca3521aca827"><div class="ttname"><a href="class_omni3.html#ae0441ed967d51c0af373ca3521aca827">Omni3::movements</a></div><div class="ttdeci">Movements * movements</div><div class="ttdef"><b>Definition:</b> omni3.h:155</div></div>

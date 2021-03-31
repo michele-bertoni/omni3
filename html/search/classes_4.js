@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['spacespeedlinear_156',['SpaceSpeedLinear',['../class_movements_1_1_space_speed_linear.html',1,'Movements']]],
-  ['spacetimelinear_157',['SpaceTimeLinear',['../class_movements_1_1_space_time_linear.html',1,'Movements']]],
-  ['speedindefinite_158',['SpeedIndefinite',['../class_movements_1_1_speed_indefinite.html',1,'Movements']]],
-  ['speedtimelinear_159',['SpeedTimeLinear',['../class_movements_1_1_speed_time_linear.html',1,'Movements']]],
-  ['still_160',['Still',['../class_movements_1_1_still.html',1,'Movements']]]
+  ['omni3_169',['Omni3',['../class_omni3.html',1,'']]],
+  ['omni3_5fparams_5fs_170',['omni3_params_s',['../structomni3__params__s.html',1,'']]]
 ];

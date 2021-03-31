@@ -86,8 +86,9 @@ Inheritance diagram for Movements::SpaceSpeedLinear:</div>
  <div class="center">
   <img src="class_movements_1_1_space_speed_linear.png" usemap="#Movements::SpaceSpeedLinear_map" alt=""/>
   <map id="Movements::SpaceSpeedLinear_map" name="Movements::SpaceSpeedLinear_map">
-<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="0,56,190,80"/>
-<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,190,24"/>
+<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="0,56,220,80"/>
+<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,220,24"/>
+<area href="class_movements_1_1_space_norm_speed_linear.html" alt="Movements::SpaceNormSpeedLinear" shape="rect" coords="0,168,220,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -97,8 +98,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a56f00d14302fd83e4bde71c5c7248eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b5cf443bc26b33e4c7127c4a2075ff6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#a4b5cf443bc26b33e4c7127c4a2075ff6">isFinished</a> (const double *position, const double *brakingSpace, unsigned long time) override</td></tr>
 <tr class="separator:a4b5cf443bc26b33e4c7127c4a2075ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add0586fb6869af6466085f5e6648c97c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#add0586fb6869af6466085f5e6648c97c">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
-<tr class="separator:add0586fb6869af6466085f5e6648c97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5156a20ced5e997eef2ce3c80b354781"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#a5156a20ced5e997eef2ce3c80b354781">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
+<tr class="separator:a5156a20ced5e997eef2ce3c80b354781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_movements_1_1_finite_movement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_movements_1_1_finite_movement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_movements_1_1_finite_movement.html">Movements::FiniteMovement</a></td></tr>
 <tr class="memitem:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_finite_movement.html#aa0ac18f078b589cb52cc37c1540a9587">~FiniteMovement</a> () override=0</td></tr>
 <tr class="separator:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -112,8 +113,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af3f1cad23e6b7c4d90f5c461c32b2f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7ae46bc3d289e9b63082f6b204a7993"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#ab7ae46bc3d289e9b63082f6b204a7993">displacements</a> [<a class="el" href="movements_8h.html#a86aa12a61f858ae23c033cd9454cc985">DOF</a>] = {0.0, 0.0, 0.0}</td></tr>
 <tr class="separator:ab7ae46bc3d289e9b63082f6b204a7993"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c8fe2b250e760b7db816ae8551c4d04"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#a9c8fe2b250e760b7db816ae8551c4d04">sqrtSpeedMagnitude</a></td></tr>
-<tr class="separator:a9c8fe2b250e760b7db816ae8551c4d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7197f0b90d51c27a98f2893a682a3e75"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#a7197f0b90d51c27a98f2893a682a3e75">speedMagnitude</a></td></tr>
+<tr class="separator:a7197f0b90d51c27a98f2893a682a3e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a791c980fa47ade603bd7d25fb0c189d1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html#a791c980fa47ade603bd7d25fb0c189d1">angularSpeedMagnitude</a></td></tr>
 <tr class="separator:a791c980fa47ade603bd7d25fb0c189d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -188,7 +189,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructor of the movement described by space and time </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor of the movement described by space and speed </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>target x coordinate in meters </td></tr>
     <tr><td class="paramname">y</td><td>target y coordinate in meters </td></tr>
@@ -202,8 +203,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="add0586fb6869af6466085f5e6648c97c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add0586fb6869af6466085f5e6648c97c">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="a5156a20ced5e997eef2ce3c80b354781"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5156a20ced5e997eef2ce3c80b354781">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,7 +213,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::SpaceSpeedLinear::getSpeed </td>
+          <td class="memname">bool Movements::SpaceSpeedLinear::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -242,8 +243,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>false, since targetSpeed array is not normalized </dd></dl>
 
-<p>Implements <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>.</p>
+<p>Implements <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_movements_1_1_space_norm_speed_linear.html#a42eba240c480574c782ca2b0ff1dbe3b">Movements::SpaceNormSpeedLinear</a>.</p>
 
 </div>
 </div>
@@ -347,8 +351,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c8fe2b250e760b7db816ae8551c4d04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c8fe2b250e760b7db816ae8551c4d04">&#9670;&nbsp;</a></span>sqrtSpeedMagnitude</h2>
+<a id="a7197f0b90d51c27a98f2893a682a3e75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7197f0b90d51c27a98f2893a682a3e75">&#9670;&nbsp;</a></span>speedMagnitude</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -357,7 +361,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double Movements::SpaceSpeedLinear::sqrtSpeedMagnitude</td>
+          <td class="memname">double Movements::SpaceSpeedLinear::speedMagnitude</td>
         </tr>
       </table>
   </td>

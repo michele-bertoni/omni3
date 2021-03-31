@@ -89,6 +89,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_movement.html">Movement</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_norm_speed_indefinite.html">NormSpeedIndefinite</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_norm_speed_time_linear.html">NormSpeedTimeLinear</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_norm_speed_linear.html">SpaceNormSpeedLinear</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html">SpaceSpeedLinear</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_time_linear.html">SpaceTimeLinear</a></td></tr>
@@ -108,16 +114,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab629b63bd32f81afc7f4bb1434730b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70957631f3cf4ddb74d5b90d175fce45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a70957631f3cf4ddb74d5b90d175fce45">addStop</a> ()</td></tr>
 <tr class="separator:a70957631f3cf4ddb74d5b90d175fce45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc7a3be62d8280b77fa37ed8b9199d38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#abc7a3be62d8280b77fa37ed8b9199d38">addConstantMovement</a> (double forward, double strafe, double angular)</td></tr>
-<tr class="separator:abc7a3be62d8280b77fa37ed8b9199d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cec6b3f343cb67534bc97518ac0511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#ad4cec6b3f343cb67534bc97518ac0511">addConstantSpeedMovement</a> (double forward, double strafe, double angular)</td></tr>
+<tr class="separator:ad4cec6b3f343cb67534bc97518ac0511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a197cb9a447a87d9a6fa3a0b11ed7c911"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a197cb9a447a87d9a6fa3a0b11ed7c911">addConstantNormSpeedMovement</a> (double speedNorm, double theta, double angularNorm)</td></tr>
+<tr class="separator:a197cb9a447a87d9a6fa3a0b11ed7c911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d7024db9f11348c1d3e97d422998de6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a7d7024db9f11348c1d3e97d422998de6">addTargetPosTime</a> (double x, double y, double phi, double duration)</td></tr>
 <tr class="separator:a7d7024db9f11348c1d3e97d422998de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4ef95960e6fab73d008beb801cb73c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#adf4ef95960e6fab73d008beb801cb73c">addTargetPosSpeed</a> (double x, double y, double phi, double speedMag, double angularMag)</td></tr>
 <tr class="separator:adf4ef95960e6fab73d008beb801cb73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12435b1f3bf1179c03467f0d21673fc8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a12435b1f3bf1179c03467f0d21673fc8">addTargetPosNormSpeed</a> (double x, double y, double phi, double speedNorm, double angularNorm)</td></tr>
+<tr class="separator:a12435b1f3bf1179c03467f0d21673fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08bc831ca5d49430c99e453598ce6298"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a08bc831ca5d49430c99e453598ce6298">addTargetSpeedTime</a> (double forward, double strafe, double angular, double duration)</td></tr>
 <tr class="separator:a08bc831ca5d49430c99e453598ce6298"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9da0e9118d23128d13742d03b75ef02c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a9da0e9118d23128d13742d03b75ef02c">handle</a> (const double *currentPosition, const double *currentSpeed, unsigned long time, double *targetSpeed)</td></tr>
-<tr class="separator:a9da0e9118d23128d13742d03b75ef02c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14aa162659c2cc7b37912423e3f6e0a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a14aa162659c2cc7b37912423e3f6e0a2">addTargetNormSpeedTime</a> (double speedNorm, double theta, double angularNorm, double duration)</td></tr>
+<tr class="separator:a14aa162659c2cc7b37912423e3f6e0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa918ec6aa9c6afc13fe4d128b93058b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#aaa918ec6aa9c6afc13fe4d128b93058b">handle</a> (const double *currentPosition, const double *currentSpeed, unsigned long time, double *targetSpeed)</td></tr>
+<tr class="separator:aaa918ec6aa9c6afc13fe4d128b93058b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -217,8 +229,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abc7a3be62d8280b77fa37ed8b9199d38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc7a3be62d8280b77fa37ed8b9199d38">&#9670;&nbsp;</a></span>addConstantMovement()</h2>
+<a id="a197cb9a447a87d9a6fa3a0b11ed7c911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a197cb9a447a87d9a6fa3a0b11ed7c911">&#9670;&nbsp;</a></span>addConstantNormSpeedMovement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +239,58 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::addConstantMovement </td>
+          <td class="memname">bool Movements::addConstantNormSpeedMovement </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>speedNorm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angularNorm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Schedules an indefinite movement with given normalized planar and angular speeds </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speedNorm</td><td>requested norm of planar speed vector (it must be in range [0.0, 1.0]) </td></tr>
+    <tr><td class="paramname">theta</td><td>requested angle defining the direction of the speed vector </td></tr>
+    <tr><td class="paramname">angularNorm</td><td>requested norm of angular speed vector (it must be in range [-1.0, 1.0]) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>boolean indicating whether the movement was scheduled or not (i.e. because schedule is full) </dd></dl>
+
+</div>
+</div>
+<a id="ad4cec6b3f343cb67534bc97518ac0511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4cec6b3f343cb67534bc97518ac0511">&#9670;&nbsp;</a></span>addConstantSpeedMovement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Movements::addConstantSpeedMovement </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>forward</em>, </td>
@@ -293,6 +356,129 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a14aa162659c2cc7b37912423e3f6e0a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14aa162659c2cc7b37912423e3f6e0a2">&#9670;&nbsp;</a></span>addTargetNormSpeedTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Movements::addTargetNormSpeedTime </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>speedNorm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angularNorm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>duration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Schedule a finite movement that ends when time limit is reached </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speedNorm</td><td>requested norm of planar speed vector (it must be in range [0.0, 1.0]) </td></tr>
+    <tr><td class="paramname">theta</td><td>requested angle defining the direction of the speed vector </td></tr>
+    <tr><td class="paramname">angularNorm</td><td>requested norm of angular speed vector (it must be in range [-1.0, 1.0]) </td></tr>
+    <tr><td class="paramname">duration</td><td>duration of the movement </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>boolean indicating whether the movement was scheduled or not (i.e. because schedule is full) </dd></dl>
+
+</div>
+</div>
+<a id="a12435b1f3bf1179c03467f0d21673fc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12435b1f3bf1179c03467f0d21673fc8">&#9670;&nbsp;</a></span>addTargetPosNormSpeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Movements::addTargetPosNormSpeed </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>speedNorm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angularNorm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Schedule a finite movement that ends when position is reached or time limit is reached, whatever comes first </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>target x position </td></tr>
+    <tr><td class="paramname">y</td><td>target y position </td></tr>
+    <tr><td class="paramname">phi</td><td>target phi position </td></tr>
+    <tr><td class="paramname">speedNorm</td><td>requested norm of planar speed vector (it must be in range [0.0, 1.0]) </td></tr>
+    <tr><td class="paramname">angularNorm</td><td>requested norm of angular speed vector (it must be in range [0.0, 1.0]) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>boolean indicating whether the movement was scheduled or not (i.e. because schedule is full) </dd></dl>
+
+</div>
+</div>
 <a id="adf4ef95960e6fab73d008beb801cb73c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf4ef95960e6fab73d008beb801cb73c">&#9670;&nbsp;</a></span>addTargetPosSpeed()</h2>
 
@@ -349,8 +535,8 @@ Private Attributes</h2></td></tr>
     <tr><td class="paramname">x</td><td>target x position </td></tr>
     <tr><td class="paramname">y</td><td>target y position </td></tr>
     <tr><td class="paramname">phi</td><td>target phi position </td></tr>
-    <tr><td class="paramname">speedMag</td><td>positive magnitude of planar speed vector </td></tr>
-    <tr><td class="paramname">angularMag</td><td>positive magnitude of angular speed vector </td></tr>
+    <tr><td class="paramname">speedMag</td><td>requested positive magnitude of planar speed vector </td></tr>
+    <tr><td class="paramname">angularMag</td><td>requested positive magnitude of angular speed vector </td></tr>
   </table>
   </dd>
 </dl>
@@ -507,8 +693,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9da0e9118d23128d13742d03b75ef02c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9da0e9118d23128d13742d03b75ef02c">&#9670;&nbsp;</a></span>handle()</h2>
+<a id="aaa918ec6aa9c6afc13fe4d128b93058b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa918ec6aa9c6afc13fe4d128b93058b">&#9670;&nbsp;</a></span>handle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -517,7 +703,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::handle </td>
+          <td class="memname">bool Movements::handle </td>
           <td>(</td>
           <td class="paramtype">const double *&#160;</td>
           <td class="paramname"><em>currentPosition</em>, </td>
@@ -561,6 +747,7 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if targetSpeed contains normalized values, false if it's in the form [m/s, m/s, rad/s] </dd></dl>
 
 </div>
 </div>

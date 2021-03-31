@@ -95,9 +95,15 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_speed_linear.html">Movements::SpaceSpeedLinear</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_norm_speed_linear.html">Movements::SpaceNormSpeedLinear</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_time_linear.html">Movements::SpeedTimeLinear</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_norm_speed_time_linear.html">Movements::NormSpeedTimeLinear</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_indefinite.html">Movements::SpeedIndefinite</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_norm_speed_indefinite.html">Movements::NormSpeedIndefinite</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -120,6 +126,16 @@ Macros</h2></td></tr>
 <tr class="separator:a8d736f6fc3a747ef2d3de13f3959f504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4f3b18a4060199e7679c6f0c9fca631"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#aa4f3b18a4060199e7679c6f0c9fca631">TO_MILLIS</a>&#160;&#160;&#160;1000</td></tr>
 <tr class="separator:aa4f3b18a4060199e7679c6f0c9fca631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469a525cc73f844c2c3c99075f479daa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>(a)&#160;&#160;&#160;((a)*(a))</td></tr>
+<tr class="separator:a469a525cc73f844c2c3c99075f479daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54538b9072cfbeab52dc52faea5ece76"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#a54538b9072cfbeab52dc52faea5ece76">sPow2</a>(a)&#160;&#160;&#160;(abs((a))*(a))</td></tr>
+<tr class="separator:a54538b9072cfbeab52dc52faea5ece76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b592e24e632e887dcde3350a88663c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#af2b592e24e632e887dcde3350a88663c">vectorsSumMag</a>(v1,  v2)&#160;&#160;&#160;(sqrt(<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((v1))+<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((v2))))</td></tr>
+<tr class="separator:af2b592e24e632e887dcde3350a88663c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8757f5c6a66e7b369afb74cf66a3441e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#a8757f5c6a66e7b369afb74cf66a3441e">nSpAngMag</a>(m,  m0)&#160;&#160;&#160;(<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((m))/(abs((m))+abs((m0))))</td></tr>
+<tr class="separator:a8757f5c6a66e7b369afb74cf66a3441e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad71c7c6f7560d6bd45de0801627072c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#ad71c7c6f7560d6bd45de0801627072c5">nSpAngSMag</a>(m,  m0)&#160;&#160;&#160;(<a class="el" href="movements_8h.html#a54538b9072cfbeab52dc52faea5ece76">sPow2</a>((m))/(abs((m))+abs((m0))))</td></tr>
+<tr class="separator:ad71c7c6f7560d6bd45de0801627072c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8308a32ee18bab16f99308c69f2ae8a2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="movements_8h.html#a8308a32ee18bab16f99308c69f2ae8a2">MAX_MOVEMENTS</a>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a8308a32ee18bab16f99308c69f2ae8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -187,6 +203,64 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a id="a8757f5c6a66e7b369afb74cf66a3441e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8757f5c6a66e7b369afb74cf66a3441e">&#9670;&nbsp;</a></span>nSpAngMag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define nSpAngMag</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m0&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((m))/(abs((m))+abs((m0))))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This macro, given speed and angular magnitudes in any order, computes normalized magnitude of the first magnitude </p>
+
+</div>
+</div>
+<a id="ad71c7c6f7560d6bd45de0801627072c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad71c7c6f7560d6bd45de0801627072c5">&#9670;&nbsp;</a></span>nSpAngSMag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define nSpAngSMag</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m0&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(<a class="el" href="movements_8h.html#a54538b9072cfbeab52dc52faea5ece76">sPow2</a>((m))/(abs((m))+abs((m0))))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This macro, given speed and angular magnitudes in any order, computes normalized magnitude of the first magnitude with sign </p>
+
+</div>
+</div>
 <a id="ae1377f9b559e327c2b62d9a2756b0057"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1377f9b559e327c2b62d9a2756b0057">&#9670;&nbsp;</a></span>POS_PHI</h2>
 
@@ -232,6 +306,44 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a id="a469a525cc73f844c2c3c99075f479daa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469a525cc73f844c2c3c99075f479daa">&#9670;&nbsp;</a></span>pow2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define pow2</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a</td><td>)</td>
+          <td>&#160;&#160;&#160;((a)*(a))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This macro computes the square of a number (^2) </p>
+
+</div>
+</div>
+<a id="a54538b9072cfbeab52dc52faea5ece76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54538b9072cfbeab52dc52faea5ece76">&#9670;&nbsp;</a></span>sPow2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define sPow2</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a</td><td>)</td>
+          <td>&#160;&#160;&#160;(abs((a))*(a))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This macro computes the signed square of a number (^2) </p>
+
+</div>
+</div>
 <a id="a3159cc5066a919611764b2e8a9bdb937"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3159cc5066a919611764b2e8a9bdb937">&#9670;&nbsp;</a></span>STRAFE</h2>
 
@@ -274,6 +386,34 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Milliseconds in one second </p>
+
+</div>
+</div>
+<a id="af2b592e24e632e887dcde3350a88663c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2b592e24e632e887dcde3350a88663c">&#9670;&nbsp;</a></span>vectorsSumMag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define vectorsSumMag</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v2&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(sqrt(<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((v1))+<a class="el" href="movements_8h.html#a469a525cc73f844c2c3c99075f479daa">pow2</a>((v2))))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

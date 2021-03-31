@@ -86,8 +86,9 @@ Inheritance diagram for Movements::SpeedTimeLinear:</div>
  <div class="center">
   <img src="class_movements_1_1_speed_time_linear.png" usemap="#Movements::SpeedTimeLinear_map" alt=""/>
   <map id="Movements::SpeedTimeLinear_map" name="Movements::SpeedTimeLinear_map">
-<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="0,56,180,80"/>
-<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,180,24"/>
+<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="0,56,210,80"/>
+<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,210,24"/>
+<area href="class_movements_1_1_norm_speed_time_linear.html" alt="Movements::NormSpeedTimeLinear" shape="rect" coords="0,168,210,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -97,8 +98,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab34a4d662837815a6697dbc70f3bb20e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affa258b2f787b423d51b718448ac0820"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_time_linear.html#affa258b2f787b423d51b718448ac0820">isFinished</a> (const double *position, const double *brakingSpace, unsigned long time) override</td></tr>
 <tr class="separator:affa258b2f787b423d51b718448ac0820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27ab0c0240bddb849604ec0f4db4b8ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_time_linear.html#a27ab0c0240bddb849604ec0f4db4b8ee">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
-<tr class="separator:a27ab0c0240bddb849604ec0f4db4b8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08d590b3f3d8a05daa0a393b1dd5f7a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_time_linear.html#a08d590b3f3d8a05daa0a393b1dd5f7a2">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
+<tr class="separator:a08d590b3f3d8a05daa0a393b1dd5f7a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_movements_1_1_finite_movement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_movements_1_1_finite_movement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_movements_1_1_finite_movement.html">Movements::FiniteMovement</a></td></tr>
 <tr class="memitem:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_finite_movement.html#aa0ac18f078b589cb52cc37c1540a9587">~FiniteMovement</a> () override=0</td></tr>
 <tr class="separator:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,7 +181,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructor of the movement described by space and time </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor of the movement described by speed and time </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forward</td><td>forward speed in m/s </td></tr>
     <tr><td class="paramname">strafe</td><td>strafe speed in m/s </td></tr>
@@ -193,8 +194,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a27ab0c0240bddb849604ec0f4db4b8ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27ab0c0240bddb849604ec0f4db4b8ee">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="a08d590b3f3d8a05daa0a393b1dd5f7a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08d590b3f3d8a05daa0a393b1dd5f7a2">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +204,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::SpeedTimeLinear::getSpeed </td>
+          <td class="memname">bool Movements::SpeedTimeLinear::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -233,8 +234,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>false, since targetSpeed array is not normalized </dd></dl>
 
-<p>Implements <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>.</p>
+<p>Implements <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_movements_1_1_norm_speed_time_linear.html#ae557e6083d808020091af269e6fe0acc">Movements::NormSpeedTimeLinear</a>.</p>
 
 </div>
 </div>

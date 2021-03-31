@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['tan30_297',['TAN30',['../omni3_8h.html#a851b89f09bd82a572004899970c2dbca',1,'omni3.h']]],
-  ['theta_298',['THETA',['../movements_8h.html#aaa169fd8b9a843d1bd57fe1eae032115',1,'movements.h']]],
-  ['to_5fmillis_299',['TO_MILLIS',['../movements_8h.html#aa4f3b18a4060199e7679c6f0c9fca631',1,'movements.h']]]
+  ['sin30_321',['SIN30',['../omni3_8h.html#a8918e0fd666a183647995f1146aa4bed',1,'omni3.h']]],
+  ['spow2_322',['sPow2',['../movements_8h.html#a54538b9072cfbeab52dc52faea5ece76',1,'movements.h']]],
+  ['strafe_323',['STRAFE',['../movements_8h.html#a3159cc5066a919611764b2e8a9bdb937',1,'movements.h']]]
 ];

@@ -94,8 +94,8 @@ Inheritance diagram for Movements::Still:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a45d4e20fe1a881a375e82bab7a22d64f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_still.html#a45d4e20fe1a881a375e82bab7a22d64f">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
-<tr class="separator:a45d4e20fe1a881a375e82bab7a22d64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a0c27c3ac8bbca601fe14bb5e4a9a9d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_still.html#a7a0c27c3ac8bbca601fe14bb5e4a9a9d">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
+<tr class="separator:a7a0c27c3ac8bbca601fe14bb5e4a9a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1807b8684fb9b8b7b53819d773266046"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_still.html#a1807b8684fb9b8b7b53819d773266046">free</a> () override</td></tr>
 <tr class="separator:a1807b8684fb9b8b7b53819d773266046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb97a9322f6ad63f90c123b553cf8ed5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_still.html#afb97a9322f6ad63f90c123b553cf8ed5">Still</a> (<a class="el" href="class_movements_1_1_still.html">Still</a> const &amp;)=delete</td></tr>
@@ -236,8 +236,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a45d4e20fe1a881a375e82bab7a22d64f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45d4e20fe1a881a375e82bab7a22d64f">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="a7a0c27c3ac8bbca601fe14bb5e4a9a9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a0c27c3ac8bbca601fe14bb5e4a9a9d">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +246,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::Still::getSpeed </td>
+          <td class="memname">bool Movements::Still::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -273,12 +273,13 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">position</td><td>current position of the robot ([m, m, rad]) </td></tr>
     <tr><td class="paramname">time</td><td>current time in milliseconds </td></tr>
-    <tr><td class="paramname">targetSpeed</td><td>array in which target speed vector ([m/s, m/s, rad/s]) is stored </td></tr>
+    <tr><td class="paramname">targetSpeed</td><td>array in which target normalized speed vector is stored </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true, since targetSpeed array is normalized </dd></dl>
 
-<p>Implements <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>.</p>
+<p>Implements <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>.</p>
 
 </div>
 </div>

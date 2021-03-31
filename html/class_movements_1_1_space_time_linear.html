@@ -97,8 +97,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af6042c13f39e5ab4ce61f0663ba2f9af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa74c91e678924b35e4d3787b45b5c313"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_time_linear.html#aa74c91e678924b35e4d3787b45b5c313">isFinished</a> (const double *position, const double *brakingSpace, unsigned long time) override</td></tr>
 <tr class="separator:aa74c91e678924b35e4d3787b45b5c313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c91e5ed2f7f5bf6be2743382c3eca67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_time_linear.html#a1c91e5ed2f7f5bf6be2743382c3eca67">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
-<tr class="separator:a1c91e5ed2f7f5bf6be2743382c3eca67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09f22de5c278c82b0e5681f35697d01b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_space_time_linear.html#a09f22de5c278c82b0e5681f35697d01b">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
+<tr class="separator:a09f22de5c278c82b0e5681f35697d01b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_movements_1_1_finite_movement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_movements_1_1_finite_movement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_movements_1_1_finite_movement.html">Movements::FiniteMovement</a></td></tr>
 <tr class="memitem:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_finite_movement.html#aa0ac18f078b589cb52cc37c1540a9587">~FiniteMovement</a> () override=0</td></tr>
 <tr class="separator:aa0ac18f078b589cb52cc37c1540a9587 inherit pub_methods_class_movements_1_1_finite_movement"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,8 +195,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1c91e5ed2f7f5bf6be2743382c3eca67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c91e5ed2f7f5bf6be2743382c3eca67">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="a09f22de5c278c82b0e5681f35697d01b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09f22de5c278c82b0e5681f35697d01b">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -205,7 +205,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::SpaceTimeLinear::getSpeed </td>
+          <td class="memname">bool Movements::SpaceTimeLinear::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -235,8 +235,9 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>false, since targetSpeed array is not normalized </dd></dl>
 
-<p>Implements <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>.</p>
+<p>Implements <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>.</p>
 
 </div>
 </div>

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pos_5fphi_293',['POS_PHI',['../movements_8h.html#ae1377f9b559e327c2b62d9a2756b0057',1,'movements.h']]],
-  ['pos_5fx_294',['POS_X',['../movements_8h.html#a9fcdf0e14a2830c8f14eb2cdad8412f5',1,'movements.h']]],
-  ['pos_5fy_295',['POS_Y',['../movements_8h.html#a90f06ea2a12ab06566ed7ae1d73e5917',1,'movements.h']]]
+  ['nspangmag_315',['nSpAngMag',['../movements_8h.html#a8757f5c6a66e7b369afb74cf66a3441e',1,'movements.h']]],
+  ['nspangsmag_316',['nSpAngSMag',['../movements_8h.html#ad71c7c6f7560d6bd45de0801627072c5',1,'movements.h']]]
 ];

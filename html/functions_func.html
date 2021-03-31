@@ -71,11 +71,20 @@ $(function() {
 &#160;
 
 <h3><a id="index_a"></a>- a -</h3><ul>
-<li>addConstantMovement()
-: <a class="el" href="class_movements.html#abc7a3be62d8280b77fa37ed8b9199d38">Movements</a>
+<li>addConstantNormSpeedMovement()
+: <a class="el" href="class_movements.html#a197cb9a447a87d9a6fa3a0b11ed7c911">Movements</a>
+</li>
+<li>addConstantSpeedMovement()
+: <a class="el" href="class_movements.html#ad4cec6b3f343cb67534bc97518ac0511">Movements</a>
 </li>
 <li>addStop()
 : <a class="el" href="class_movements.html#a70957631f3cf4ddb74d5b90d175fce45">Movements</a>
+</li>
+<li>addTargetNormSpeedTime()
+: <a class="el" href="class_movements.html#a14aa162659c2cc7b37912423e3f6e0a2">Movements</a>
+</li>
+<li>addTargetPosNormSpeed()
+: <a class="el" href="class_movements.html#a12435b1f3bf1179c03467f0d21673fc8">Movements</a>
 </li>
 <li>addTargetPosSpeed()
 : <a class="el" href="class_movements.html#adf4ef95960e6fab73d008beb801cb73c">Movements</a>
@@ -130,19 +139,22 @@ $(function() {
 </li>
 <li>getSpeed()
 : <a class="el" href="class_motor_driver.html#ade9ff475e2d188999e58324e67005a0e">MotorDriver</a>
-, <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>
-, <a class="el" href="class_movements_1_1_space_speed_linear.html#add0586fb6869af6466085f5e6648c97c">Movements::SpaceSpeedLinear</a>
-, <a class="el" href="class_movements_1_1_space_time_linear.html#a1c91e5ed2f7f5bf6be2743382c3eca67">Movements::SpaceTimeLinear</a>
-, <a class="el" href="class_movements_1_1_speed_indefinite.html#abe56f3c54c6dd6363ab0f0edf63512bf">Movements::SpeedIndefinite</a>
-, <a class="el" href="class_movements_1_1_speed_time_linear.html#a27ab0c0240bddb849604ec0f4db4b8ee">Movements::SpeedTimeLinear</a>
-, <a class="el" href="class_movements_1_1_still.html#a45d4e20fe1a881a375e82bab7a22d64f">Movements::Still</a>
+, <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>
+, <a class="el" href="class_movements_1_1_norm_speed_indefinite.html#ac1b580a13ae4b4ff0a466951e48900fa">Movements::NormSpeedIndefinite</a>
+, <a class="el" href="class_movements_1_1_norm_speed_time_linear.html#ae557e6083d808020091af269e6fe0acc">Movements::NormSpeedTimeLinear</a>
+, <a class="el" href="class_movements_1_1_space_norm_speed_linear.html#a42eba240c480574c782ca2b0ff1dbe3b">Movements::SpaceNormSpeedLinear</a>
+, <a class="el" href="class_movements_1_1_space_speed_linear.html#a5156a20ced5e997eef2ce3c80b354781">Movements::SpaceSpeedLinear</a>
+, <a class="el" href="class_movements_1_1_space_time_linear.html#a09f22de5c278c82b0e5681f35697d01b">Movements::SpaceTimeLinear</a>
+, <a class="el" href="class_movements_1_1_speed_indefinite.html#a27900156131e722c3bf828c8388435ca">Movements::SpeedIndefinite</a>
+, <a class="el" href="class_movements_1_1_speed_time_linear.html#a08d590b3f3d8a05daa0a393b1dd5f7a2">Movements::SpeedTimeLinear</a>
+, <a class="el" href="class_movements_1_1_still.html#a7a0c27c3ac8bbca601fe14bb5e4a9a9d">Movements::Still</a>
 </li>
 </ul>
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
 <li>handle()
-: <a class="el" href="class_movements.html#a9da0e9118d23128d13742d03b75ef02c">Movements</a>
+: <a class="el" href="class_movements.html#aaa918ec6aa9c6afc13fe4d128b93058b">Movements</a>
 , <a class="el" href="class_omni3.html#a95c50c0f2ebd98e68ca82ecd59877a53">Omni3</a>
 , <a class="el" href="class_wheel.html#a5abb6552ddea3c1a66d57cd9597c25e2">Wheel</a>
 </li>
@@ -179,8 +191,17 @@ $(function() {
 
 
 <h3><a id="index_n"></a>- n -</h3><ul>
+<li>normalizedInverseKinematics()
+: <a class="el" href="class_omni3.html#ad860641d93bcc01a8bd4a246c55dbd8d">Omni3</a>
+</li>
 <li>normAngularToPWM()
 : <a class="el" href="class_wheel.html#a74bdf32af67b700aeeef3ef764d2f6b4">Wheel</a>
+</li>
+<li>NormSpeedIndefinite()
+: <a class="el" href="class_movements_1_1_norm_speed_indefinite.html#a369cd9bbdf97c6728888b0e1505715ea">Movements::NormSpeedIndefinite</a>
+</li>
+<li>NormSpeedTimeLinear()
+: <a class="el" href="class_movements_1_1_norm_speed_time_linear.html#a0e1c8403b480d65e9908055733db3e9f">Movements::NormSpeedTimeLinear</a>
 </li>
 </ul>
 
@@ -240,6 +261,9 @@ $(function() {
 </li>
 <li>setWheelsRadius()
 : <a class="el" href="class_omni3.html#a70732bb841e2e58faeae9887f072ad88">Omni3</a>
+</li>
+<li>SpaceNormSpeedLinear()
+: <a class="el" href="class_movements_1_1_space_norm_speed_linear.html#a37f7e1ec6fb5bb02d9112e62006147da">Movements::SpaceNormSpeedLinear</a>
 </li>
 <li>SpaceSpeedLinear()
 : <a class="el" href="class_movements_1_1_space_speed_linear.html#a56f00d14302fd83e4bde71c5c7248eff">Movements::SpaceSpeedLinear</a>

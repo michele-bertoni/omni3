@@ -86,13 +86,16 @@ Inheritance diagram for Movements::Movement:</div>
  <div class="center">
   <img src="class_movements_1_1_movement.png" usemap="#Movements::Movement_map" alt=""/>
   <map id="Movements::Movement_map" name="Movements::Movement_map">
-<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="201,56,392,80"/>
-<area href="class_movements_1_1_indefinite_movement.html" alt="Movements::IndefiniteMovement" shape="rect" coords="703,56,894,80"/>
-<area href="class_movements_1_1_space_speed_linear.html" alt="Movements::SpaceSpeedLinear" shape="rect" coords="0,112,191,136"/>
-<area href="class_movements_1_1_space_time_linear.html" alt="Movements::SpaceTimeLinear" shape="rect" coords="201,112,392,136"/>
-<area href="class_movements_1_1_speed_time_linear.html" alt="Movements::SpeedTimeLinear" shape="rect" coords="402,112,593,136"/>
-<area href="class_movements_1_1_speed_indefinite.html" alt="Movements::SpeedIndefinite" shape="rect" coords="603,112,794,136"/>
-<area href="class_movements_1_1_still.html" alt="Movements::Still" shape="rect" coords="804,112,995,136"/>
+<area href="class_movements_1_1_finite_movement.html" alt="Movements::FiniteMovement" shape="rect" coords="230,56,450,80"/>
+<area href="class_movements_1_1_indefinite_movement.html" alt="Movements::IndefiniteMovement" shape="rect" coords="805,56,1025,80"/>
+<area href="class_movements_1_1_space_speed_linear.html" alt="Movements::SpaceSpeedLinear" shape="rect" coords="0,112,220,136"/>
+<area href="class_movements_1_1_space_time_linear.html" alt="Movements::SpaceTimeLinear" shape="rect" coords="230,112,450,136"/>
+<area href="class_movements_1_1_speed_time_linear.html" alt="Movements::SpeedTimeLinear" shape="rect" coords="460,112,680,136"/>
+<area href="class_movements_1_1_speed_indefinite.html" alt="Movements::SpeedIndefinite" shape="rect" coords="690,112,910,136"/>
+<area href="class_movements_1_1_still.html" alt="Movements::Still" shape="rect" coords="920,112,1140,136"/>
+<area href="class_movements_1_1_space_norm_speed_linear.html" alt="Movements::SpaceNormSpeedLinear" shape="rect" coords="0,168,220,192"/>
+<area href="class_movements_1_1_norm_speed_time_linear.html" alt="Movements::NormSpeedTimeLinear" shape="rect" coords="460,168,680,192"/>
+<area href="class_movements_1_1_norm_speed_indefinite.html" alt="Movements::NormSpeedIndefinite" shape="rect" coords="690,168,910,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -100,8 +103,8 @@ Inheritance diagram for Movements::Movement:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a37705cee09c9df69fd0613586614c1d8"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_movement.html#a37705cee09c9df69fd0613586614c1d8">~Movement</a> ()=0</td></tr>
 <tr class="separator:a37705cee09c9df69fd0613586614c1d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a041fd95671a61992e76d4f6ac6effcb9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">getSpeed</a> (unsigned long time, double *targetSpeed)=0</td></tr>
-<tr class="separator:a041fd95671a61992e76d4f6ac6effcb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af572ec6d53c03398145365c36a73201e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">getSpeed</a> (unsigned long time, double *targetSpeed)=0</td></tr>
+<tr class="separator:af572ec6d53c03398145365c36a73201e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -182,8 +185,8 @@ Static Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a041fd95671a61992e76d4f6ac6effcb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a041fd95671a61992e76d4f6ac6effcb9">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="af572ec6d53c03398145365c36a73201e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af572ec6d53c03398145365c36a73201e">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +195,7 @@ Static Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Movements::Movement::getSpeed </td>
+          <td class="memname">virtual bool Movements::Movement::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -218,12 +221,13 @@ Static Protected Member Functions</h2></td></tr>
 <p>This pure virtual method must be overridden by a method that, given the current position and the time, sets targetSpeed values to the desired ones </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">time</td><td>current time in milliseconds </td></tr>
-    <tr><td class="paramname">targetSpeed</td><td>array in which target speed vector ([m/s, m/s, rad/s]) is stored </td></tr>
+    <tr><td class="paramname">targetSpeed</td><td>array in which target speed vector is stored </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if targetSpeed contains normalized values, false if it's in the form [m/s, m/s, rad/s] </dd></dl>
 
-<p>Implemented in <a class="el" href="class_movements_1_1_speed_indefinite.html#abe56f3c54c6dd6363ab0f0edf63512bf">Movements::SpeedIndefinite</a>, <a class="el" href="class_movements_1_1_speed_time_linear.html#a27ab0c0240bddb849604ec0f4db4b8ee">Movements::SpeedTimeLinear</a>, <a class="el" href="class_movements_1_1_space_speed_linear.html#add0586fb6869af6466085f5e6648c97c">Movements::SpaceSpeedLinear</a>, <a class="el" href="class_movements_1_1_space_time_linear.html#a1c91e5ed2f7f5bf6be2743382c3eca67">Movements::SpaceTimeLinear</a>, and <a class="el" href="class_movements_1_1_still.html#a45d4e20fe1a881a375e82bab7a22d64f">Movements::Still</a>.</p>
+<p>Implemented in <a class="el" href="class_movements_1_1_norm_speed_indefinite.html#ac1b580a13ae4b4ff0a466951e48900fa">Movements::NormSpeedIndefinite</a>, <a class="el" href="class_movements_1_1_speed_indefinite.html#a27900156131e722c3bf828c8388435ca">Movements::SpeedIndefinite</a>, <a class="el" href="class_movements_1_1_norm_speed_time_linear.html#ae557e6083d808020091af269e6fe0acc">Movements::NormSpeedTimeLinear</a>, <a class="el" href="class_movements_1_1_speed_time_linear.html#a08d590b3f3d8a05daa0a393b1dd5f7a2">Movements::SpeedTimeLinear</a>, <a class="el" href="class_movements_1_1_space_norm_speed_linear.html#a42eba240c480574c782ca2b0ff1dbe3b">Movements::SpaceNormSpeedLinear</a>, <a class="el" href="class_movements_1_1_space_speed_linear.html#a5156a20ced5e997eef2ce3c80b354781">Movements::SpaceSpeedLinear</a>, <a class="el" href="class_movements_1_1_space_time_linear.html#a09f22de5c278c82b0e5681f35697d01b">Movements::SpaceTimeLinear</a>, and <a class="el" href="class_movements_1_1_still.html#a7a0c27c3ac8bbca601fe14bb5e4a9a9d">Movements::Still</a>.</p>
 
 </div>
 </div>

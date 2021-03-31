@@ -86,8 +86,9 @@ Inheritance diagram for Movements::SpeedIndefinite:</div>
  <div class="center">
   <img src="class_movements_1_1_speed_indefinite.png" usemap="#Movements::SpeedIndefinite_map" alt=""/>
   <map id="Movements::SpeedIndefinite_map" name="Movements::SpeedIndefinite_map">
-<area href="class_movements_1_1_indefinite_movement.html" alt="Movements::IndefiniteMovement" shape="rect" coords="0,56,191,80"/>
-<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,191,24"/>
+<area href="class_movements_1_1_indefinite_movement.html" alt="Movements::IndefiniteMovement" shape="rect" coords="0,56,199,80"/>
+<area href="class_movements_1_1_movement.html" alt="Movements::Movement" shape="rect" coords="0,0,199,24"/>
+<area href="class_movements_1_1_norm_speed_indefinite.html" alt="Movements::NormSpeedIndefinite" shape="rect" coords="0,168,199,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -95,8 +96,8 @@ Inheritance diagram for Movements::SpeedIndefinite:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab8545734c393f6e08036eb7cc7a35b5c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_indefinite.html#ab8545734c393f6e08036eb7cc7a35b5c">SpeedIndefinite</a> (double forward, double strafe, double angular)</td></tr>
 <tr class="separator:ab8545734c393f6e08036eb7cc7a35b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe56f3c54c6dd6363ab0f0edf63512bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_indefinite.html#abe56f3c54c6dd6363ab0f0edf63512bf">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
-<tr class="separator:abe56f3c54c6dd6363ab0f0edf63512bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27900156131e722c3bf828c8388435ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_indefinite.html#a27900156131e722c3bf828c8388435ca">getSpeed</a> (unsigned long time, double *targetSpeed) override</td></tr>
+<tr class="separator:a27900156131e722c3bf828c8388435ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c616e6d830d5ac570fcee658ec0a92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements_1_1_speed_indefinite.html#ad3c616e6d830d5ac570fcee658ec0a92">free</a> () override</td></tr>
 <tr class="separator:ad3c616e6d830d5ac570fcee658ec0a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_movements_1_1_indefinite_movement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_movements_1_1_indefinite_movement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_movements_1_1_indefinite_movement.html">Movements::IndefiniteMovement</a></td></tr>
@@ -159,7 +160,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructor sets speeds values </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor of the indefinite movement described by speed </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forward</td><td>forward component of speed vector </td></tr>
     <tr><td class="paramname">strafe</td><td>strafe component of speed vector </td></tr>
@@ -199,8 +200,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="abe56f3c54c6dd6363ab0f0edf63512bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe56f3c54c6dd6363ab0f0edf63512bf">&#9670;&nbsp;</a></span>getSpeed()</h2>
+<a id="a27900156131e722c3bf828c8388435ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27900156131e722c3bf828c8388435ca">&#9670;&nbsp;</a></span>getSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,7 +210,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Movements::SpeedIndefinite::getSpeed </td>
+          <td class="memname">bool Movements::SpeedIndefinite::getSpeed </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>time</em>, </td>
@@ -239,8 +240,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>false, since targetSpeed array is not normalized </dd></dl>
 
-<p>Implements <a class="el" href="class_movements_1_1_movement.html#a041fd95671a61992e76d4f6ac6effcb9">Movements::Movement</a>.</p>
+<p>Implements <a class="el" href="class_movements_1_1_movement.html#af572ec6d53c03398145365c36a73201e">Movements::Movement</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_movements_1_1_norm_speed_indefinite.html#ac1b580a13ae4b4ff0a466951e48900fa">Movements::NormSpeedIndefinite</a>.</p>
 
 </div>
 </div>
