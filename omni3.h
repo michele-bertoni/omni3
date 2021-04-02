@@ -10,6 +10,11 @@
 #include "motor_drivers/MR001004.h"
 
 /**
+ * Maximum number of arguments a function called through handleMessage can have
+ */
+#define MAX_ARGS 7
+
+/**
  * Omni3 is a 3-wheel drive robot and the number of wheels is of course 3
  */
 #define WHEELS_NUM 3
@@ -57,6 +62,11 @@
  */
 typedef struct omni3_params_s {
     /**
+     * Wheels' maximum angular speed in radians per second
+     */
+    double maxWheelSpeed;
+
+    /**
      * Wheels' radius in meters
      */
     double wheelsRadius;
@@ -67,14 +77,15 @@ typedef struct omni3_params_s {
     double robotRadius;
 
     /**
-     * Wheels' maximum angular speed in radians per second
-     */
-    double maxWheelSpeed;
-
-    /**
      * PID constants
      */
     double kP, kI, kD;
+
+    /**
+     * Friction constants
+     */
+     double fwdFrictionK, strFrictionK, angFrictionK;
+
 } omni3_params_t;
 
 class Omni3 {
@@ -84,16 +95,14 @@ public:
      * @param rightWheel    pointer to the Wheel object, that handles the wheel at 2 o'clock
      * @param backWheel     pointer to the Wheel object, that handles the wheel at 6 o'clock
      * @param leftWheel     pointer to the Wheel object, that handles the wheel at 10 o'clock
-     * @param parameters    pointer to the omni3_params_t with the desired information
+     * @param parameters    omni3_params_t with the desired information
      */
-    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, Movements* movements, omni3_params_t parameters) {
+    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, omni3_params_t parameters) :
+    movementsHandler(Movements(parameters.fwdFrictionK, parameters.strFrictionK, parameters.angFrictionK)){
         /* Set array of Wheel pointers */
         wheels[W_RIGHT] = rightWheel;
         wheels[W_BACK] = backWheel;
         wheels[W_LEFT] = leftWheel;
-
-        /* Set movements pointer */
-        this->movements = movements;
 
         /* Set wheels and robot radius*/
         this->setWheelsRadius(parameters.wheelsRadius);
@@ -113,8 +122,8 @@ public:
      * @param leftWheel     pointer to the Wheel object, that handles the wheel at 10 o'clock
      * @param memAddr       starting memory address where data is stored
      */
-    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, Movements* movements, int memAddr) :
-            Omni3(rightWheel, backWheel, leftWheel, movements, Omni3::readStoredData(memAddr)) {}
+    Omni3(Wheel* rightWheel, Wheel* backWheel, Wheel* leftWheel, int memAddr) :
+            Omni3(rightWheel, backWheel, leftWheel, Omni3::readStoredData(memAddr)) {}
 
     /**
      * This method asynchronously handles the movement of the robot: it must be called inside the main Arduino loop
@@ -139,6 +148,40 @@ public:
      */
     void emergencyStop();
 
+    /**
+     * This method handles the message received through communication channel (for example Serial)
+     * @param message   byte describing message type
+     * @param args      array of len MAX_ARGS, number of actual arguments is contained in the message (3 LSB)
+     * @return true if message was handled correctly, false otherwise
+     */
+    bool handleMessage(byte message, double* args);
+
+    /**
+     * This method sets, for each wheel, the maximum speed it can be reached
+     * @param speed     max speed of each wheel in rad/s: it's important that this speed can be reached by every wheel
+     */
+    void setMaxWheelSpeed(double speed);
+
+    /**
+     * This method sets the wheel radius and computes all related constants
+     * @param wheelsRadius  radius of the wheel in meters
+     */
+    void setWheelsRadius(double wheelsRadius);
+
+    /**
+     * This method sets the robot radius and computes all related constants
+     * @param robotRadius   radius of the robot in meters
+     */
+    void setRobotRadius(double robotRadius);
+
+    /**
+     * This method sets, for each wheel, PID constants to the given parameters
+     * @param kP        Proportional constant
+     * @param kI        Integrative constant
+     * @param kD        Derivative constant
+     */
+    void setPIDConstants(double kP, double kI, double kD);
+
 private:
     /**
      * Wheels array elements are ordered as follows: looking the robot from the top, place an imaginary clock dial where
@@ -150,9 +193,9 @@ private:
     Wheel* wheels[WHEELS_NUM]{};
 
     /**
-     *
+     * Handler of the robot's movements
      */
-    Movements* movements;
+    Movements movementsHandler;
 
     /**
      * Vector storing the current position of the robot: currentPosition[X]: meters, currentPosition[Y]: meters,
@@ -218,18 +261,6 @@ private:
     double R_3L = 1.0;
 
     /**
-     * This method sets the wheel radius and computes all related constants
-     * @param wheelsRadius  radius of the wheel in meters
-     */
-    void setWheelsRadius(double wheelsRadius);
-
-    /**
-     * This method sets the robot radius and computes all related constants
-     * @param robotRadius   radius of the robot in meters
-     */
-    void setRobotRadius(double robotRadius);
-
-    /**
      * This method computes the robot displacement, given each wheel's displacement
      * @param angularDisplacement   array of wheels' angular displacements in radians
      */
@@ -255,6 +286,38 @@ private:
      * This method computes and sets robot's current position from the current position and the displacement
      */
     void odometry();
+
+    /**
+     * This method handles a movement message received through communication channel (for example Serial)
+     * @param movementType  number from 0 to 15 indicating the type of movement
+     * @param argsLen       actual number of arguments in args array
+     * @param args          array of len MAX_ARGS
+     * @return true if message was handled correctly, false otherwise
+     */
+    bool handleMovementsMessage(uint8_t movementType, uint8_t argsLen, double* args);
+
+    /**
+     * This method handles a tester message received through communication channel (for example Serial)
+     * @param testType      number from 0 to 7 indicating the type of test
+     * @return true if message was handled correctly, false otherwise
+     */
+    bool handleTestersMessage(uint8_t testType);
+
+    /**
+     * This method handles a setter message received through communication channel (for example Serial)
+     * @param setterType    number from 0 to 7 indicating the type of setter
+     * @param argsLen       actual number of arguments in args array
+     * @param args          array of len MAX_ARGS
+     * @return true if message was handled correctly, false otherwise
+     */
+    bool handleSettersMessage(uint8_t setterType, uint8_t argsLen, double* args);
+
+    /**
+     * This method handles a function message received through communication channel (for example Serial)
+     * @param functionType  number from 0 to 7 indicating the type of function
+     * @return true if message was handled correctly, false otherwise
+     */
+    bool handleFunctionsMessage(uint8_t functionType);
 
 };
 

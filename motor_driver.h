@@ -10,7 +10,7 @@ public:
     /**
      * Pure virtual destructor
      */
-    virtual ~MotorDriver() = 0;
+    virtual ~MotorDriver() = default;
 
     /**
      * Max PWM value; feasible speed will be in [-MAX_PWM, MAX_PWM] range

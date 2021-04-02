@@ -37,7 +37,7 @@ void Omni3::handle() {
     currentSpeed[THETA] = displacement[THETA] / dt;
 
     /* Compute target speed vector */
-    bool isNormalized = this->movements->handle(currentPosition, currentSpeed, time, targetSpeed);
+    bool isNormalized = this->movementsHandler.handle(currentPosition, currentSpeed, time, targetSpeed);
 
     /* Update lastTime with current time */
     lastTime = time;
@@ -72,7 +72,37 @@ void Omni3::emergencyStop() {
     }
 }
 
-/* Private methods */
+bool Omni3::handleMessage(byte message, double *args) {
+    uint8_t argsLen = message & 0b00000111;
+    byte msgType = message >> 3;
+    /* Movements */
+    if (msgType >= 0b10000) {
+        return handleMovementsMessage(msgType & 0b1111, argsLen, args);
+    }
+    else {
+        /* Testers and setters */
+        if (msgType >= 0b01000) {
+            if(argsLen==0) {
+                return handleTestersMessage(msgType & 0b111);
+            }
+            else {
+                return handleSettersMessage(msgType & 0b111, argsLen, args);
+            }
+        }
+        /* Functions */
+        else {
+            return handleFunctionsMessage(msgType & 0b111);
+        }
+    }
+}
+
+void Omni3::setMaxWheelSpeed(double speed) {
+    /* For each wheel, set max speed */
+    for (auto & wheel : wheels) {
+        wheel->setMaxSpeed(speed);
+    }
+}
+
 void Omni3::setWheelsRadius (double wheelsRadius) {
     /* Set various constants */
     this->R = wheelsRadius;
@@ -92,6 +122,14 @@ void Omni3::setRobotRadius (double robotRadius) {
     this->R_3L = this->R / (3*robotRadius);
 }
 
+void Omni3::setPIDConstants(double kP, double kI, double kD) {
+    /* For each wheel, set PID constants */
+    for (auto & wheel : wheels) {
+        wheel->setPID(kP, kI, kD);
+    }
+}
+
+/* Private methods */
 void Omni3::directKinematics(const double* angularDisplacement) {
     /* forward = tan(30°)*R * (wR - wL) */
     this->displacement[FORWARD] = T30R *
@@ -156,4 +194,86 @@ void Omni3::odometry() {
     while (this->currentPosition[POS_PHI] < 0.0) {
         this->currentPosition[POS_PHI] += TWO_PI;
     }
+}
+
+bool Omni3::handleMovementsMessage(uint8_t movementType, uint8_t argsLen, double *args) {
+    switch(movementType) {
+        case 0:
+            if (argsLen==0) {
+                movementsHandler.addStop();
+                return true;
+            }
+            break;
+        case 1:
+            if (argsLen==3) {
+                movementsHandler.addConstantSpeedMovement(args[0], args[1], args[2]);
+                return true;
+            }
+            break;
+        case 2:
+            if (argsLen==3) {
+                movementsHandler.addConstantNormSpeedMovement(args[0], args[1], args[2]);
+                return true;
+            }
+            break;
+        case 3:
+            if (argsLen==4) {
+                return movementsHandler.addTargetPosTime(args[0], args[1], args[2], args[3]);
+            }
+            break;
+        case 4:
+            if (argsLen==5) {
+                return movementsHandler.addTargetPosSpeed(
+                        args[0], args[1], args[2], args[3], args[4]);
+            }
+            break;
+        case 5:
+            if (argsLen==5) {
+                return movementsHandler.addTargetPosNormSpeed(
+                        args[0], args[1], args[2], args[3], args[4]);
+            }
+            break;
+        case 6:
+            if (argsLen==4) {
+                return movementsHandler.addTargetSpeedTime(
+                        args[0], args[1], args[2], args[3]);
+            }
+            break;
+        case 7:
+            if (argsLen==4) {
+                return movementsHandler.addTargetNormSpeedTime(
+                        args[0], args[1], args[2], args[3]);
+            }
+            break;
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool Omni3::handleTestersMessage(uint8_t testType) {
+    switch (testType) {
+        case 0:
+
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool Omni3::handleSettersMessage(uint8_t setterType, uint8_t argsLen, double *args) {
+    return false;
+}
+
+bool Omni3::handleFunctionsMessage(uint8_t functionType) {
+    return false;
 }

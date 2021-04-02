@@ -11,6 +11,8 @@ project(${PROJECT_NAME})
 set(${PROJECT_NAME}_SRCS omni3.cpp omni3_test.cpp)
 set(${PROJECT_NAME}_HDRS omni3.h)
 
+set(CMAKE_CXX_FLAGS "-O3 -fno-threadsafe-statics")
+
 ### Additional static libraries to include in the target.
 # set(${PROJECT_NAME}_LIBS)
 

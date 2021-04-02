@@ -85,7 +85,7 @@ private:
         /**
          * Pure virtual destructor
          */
-        virtual ~Movement() = 0;
+        virtual ~Movement() = default;
 
         /**
          * This pure virtual method must be overridden by a method that, given the current position and the time,
@@ -114,11 +114,6 @@ private:
      */
     class FiniteMovement : public Movement {
     public:
-        /**
-         * Pure virtual destructor
-         */
-        ~FiniteMovement() override = 0;
-
         /**
          * This pure virtual method must be overridden by a method that, given the current position, the space of
          * brake and the time, sets _isFinished values to true if the current movement ended for the given axes,
@@ -170,11 +165,6 @@ private:
     class IndefiniteMovement : public Movement { ;
     public:
         /**
-         * Pure virtual destructor
-         */
-        ~IndefiniteMovement() override = 0;
-
-        /**
          * Pure virtual method for deleting the object: if the object can be deleted, override this method with
          * "delete this;", otherwise override it with an empty method
          */
@@ -213,8 +203,8 @@ private:
          * @return the instance of Still singleton
          */
         static Still* getInstance() {
-            static auto* instance = new Still;
-            return instance;
+            static Still instance;
+            return &instance;
         }
 
         /**
@@ -232,6 +222,11 @@ private:
          * Constructor is made private for avoiding creation of other instances outside the one of the Singleton
          */
         Still() = default;
+
+        /**
+         * Destructor is made private for avoiding destruction of the Singleton instance
+         */
+        ~Still() override = default;
     };
 
     /**
@@ -726,6 +721,18 @@ public:
      * Public constructor for instancing an object of class Movements without braking space compensation
      */
     Movements() : Movements(0.0, 0.0, 0.0) {}
+
+    /**
+     * Setter for friction constants
+     * @param forwardFrictionK  coefficient of friction on forward component of speed vector
+     * @param strafeFrictionK   coefficient of friction on strafe component of speed vector
+     * @param angularFrictionK  coefficient of friction on angular component of speed vector
+     */
+    void setFrictionConstants(double forwardFrictionK, double strafeFrictionK, double angularFrictionK) {
+        this->frictionCoefficient[FORWARD] = forwardFrictionK;
+        this->frictionCoefficient[STRAFE] = strafeFrictionK;
+        this->frictionCoefficient[THETA] = angularFrictionK;
+    }
 
     /**
      * Schedules a Still movement; this method is called every time a new FiniteMovement is scheduled, so there is no

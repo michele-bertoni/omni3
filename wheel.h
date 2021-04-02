@@ -35,7 +35,7 @@ public:
      * @param driver    Driver for handling the wheel; it must be an instance of a child class of the class MotorDriver
      * @param encoder   Encoder for reading wheel position
      */
-    Wheel(MotorDriver& driver, Encoder& encoder) :
+    Wheel(MotorDriver *driver, Encoder *encoder) :
             driver(driver), encoder(encoder), maxSpeed(0) {
         /* Initialize PID constants and initialize speed to 0 */
         this->kP = D_KP;
@@ -73,11 +73,11 @@ public:
         /* If maxSpeed is 0.0, update PID, but discard result and stop the motor */
         if(maxSpeed == 0.0) {
             this->updatePID(deltaTime);
-            driver.setSpeed(MotorDriver::STILL_PWM);
+            driver->setSpeed(MotorDriver::STILL_PWM);
         }
         /* Otherwise, send to the driver the PWM value computed by PID */
         else {
-            driver.setSpeed(this->updatePID(deltaTime));
+            driver->setSpeed(this->updatePID(deltaTime));
         }
 
         /* Update lastTime with the current one and return the number of radians the wheel turned */
@@ -153,7 +153,7 @@ public:
             this->maxSpeed = this->actualSpeed;
         }
         /* Make wheel turn at full speed, corresponding to highest PWM value */
-        driver.setSpeed(MotorDriver::MAX_PWM);
+        driver->setSpeed(MotorDriver::MAX_PWM);
 
         /* Update lastTime with the current one */
         this->lastUpdateTime = time;
@@ -177,7 +177,7 @@ public:
         this->maxSpeed = _maxSpeed;
 
         if(_maxSpeed == 0.0) {
-            driver.setSpeed(MotorDriver::STILL_PWM);
+            driver->setSpeed(MotorDriver::STILL_PWM);
             this->targetSpeed = 0.0;
         }
     }
@@ -186,12 +186,12 @@ private:
     /**
      * Motor driver
      */
-    MotorDriver& driver;
+    MotorDriver *driver;
 
     /**
      * Wheel encoder
      */
-    Encoder& encoder;
+    Encoder *encoder;
 
     /**
      * Maximum angular speed in radians per second
@@ -275,7 +275,7 @@ private:
      */
     int updateActualSpeed(double deltaTime) {
         /* Read position of the wheel from the encoder and compute the difference from last position */
-        int encoderValue = encoder.read();
+        int encoderValue = encoder->read();
         int deltaSteps = encoderValue - lastEncoderValue;
 
         /* Compute and store actual angular speed of the wheel */
