@@ -83,7 +83,7 @@ private:
     class Movement {
     public:
         /**
-         * Pure virtual destructor
+         * Virtual destructor
          */
         virtual ~Movement() = default;
 
@@ -114,6 +114,11 @@ private:
      */
     class FiniteMovement : public Movement {
     public:
+        /**
+         * Virtual destructor
+         */
+        ~FiniteMovement() override = default;
+
         /**
          * This pure virtual method must be overridden by a method that, given the current position, the space of
          * brake and the time, sets _isFinished values to true if the current movement ended for the given axes,
@@ -164,6 +169,11 @@ private:
      */
     class IndefiniteMovement : public Movement { ;
     public:
+        /**
+         * Virtual destructor
+         */
+        ~IndefiniteMovement() override = default;
+
         /**
          * Pure virtual method for deleting the object: if the object can be deleted, override this method with
          * "delete this;", otherwise override it with an empty method

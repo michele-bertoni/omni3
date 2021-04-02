@@ -8,7 +8,7 @@
 class MotorDriver {
 public:
     /**
-     * Pure virtual destructor
+     * Virtual destructor
      */
     virtual ~MotorDriver() = default;
 

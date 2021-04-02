@@ -10,9 +10,10 @@ var searchData=
   ['addtargetposspeed_9',['addTargetPosSpeed',['../class_movements.html#adf4ef95960e6fab73d008beb801cb73c',1,'Movements']]],
   ['addtargetpostime_10',['addTargetPosTime',['../class_movements.html#a7d7024db9f11348c1d3e97d422998de6',1,'Movements']]],
   ['addtargetspeedtime_11',['addTargetSpeedTime',['../class_movements.html#a08bc831ca5d49430c99e453598ce6298',1,'Movements']]],
-  ['angulardistance_12',['angularDistance',['../class_movements_1_1_movement.html#abf9fc4bd104d70a9df53c3e7449fbf5f',1,'Movements::Movement']]],
-  ['angularspeedmagnitude_13',['angularSpeedMagnitude',['../class_movements_1_1_space_speed_linear.html#a791c980fa47ade603bd7d25fb0c189d1',1,'Movements::SpaceSpeedLinear']]],
-  ['angulartolerance_14',['angularTolerance',['../class_movements_1_1_finite_movement.html#afae2437ee7dcc470a1f88c41801fce8c',1,'Movements::FiniteMovement']]],
-  ['angulartopwm_15',['angularToPWM',['../class_wheel.html#a1187248ddd1e6f1718c9ff30a0139623',1,'Wheel']]],
-  ['appendfinitemovement_16',['appendFiniteMovement',['../class_movements.html#ae3a00d2cb6bc0e9559fb8900f5f8220e',1,'Movements']]]
+  ['angfrictionk_12',['angFrictionK',['../structomni3__params__s.html#a8014d2efcb2a7db99f4ffd2e4bfbed4e',1,'omni3_params_s']]],
+  ['angulardistance_13',['angularDistance',['../class_movements_1_1_movement.html#abf9fc4bd104d70a9df53c3e7449fbf5f',1,'Movements::Movement']]],
+  ['angularspeedmagnitude_14',['angularSpeedMagnitude',['../class_movements_1_1_space_speed_linear.html#a791c980fa47ade603bd7d25fb0c189d1',1,'Movements::SpaceSpeedLinear']]],
+  ['angulartolerance_15',['angularTolerance',['../class_movements_1_1_finite_movement.html#afae2437ee7dcc470a1f88c41801fce8c',1,'Movements::FiniteMovement']]],
+  ['angulartopwm_16',['angularToPWM',['../class_wheel.html#a1187248ddd1e6f1718c9ff30a0139623',1,'Wheel']]],
+  ['appendfinitemovement_17',['appendFiniteMovement',['../class_movements.html#ae3a00d2cb6bc0e9559fb8900f5f8220e',1,'Movements']]]
 ];

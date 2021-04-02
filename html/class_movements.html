@@ -112,6 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8bb8ca3baf29a9466487b17ca9744d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab629b63bd32f81afc7f4bb1434730b0d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#ab629b63bd32f81afc7f4bb1434730b0d">Movements</a> ()</td></tr>
 <tr class="separator:ab629b63bd32f81afc7f4bb1434730b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b371bf2369a64bc2e11498583894188"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a9b371bf2369a64bc2e11498583894188">setFrictionConstants</a> (double forwardFrictionK, double strafeFrictionK, double angularFrictionK)</td></tr>
+<tr class="separator:a9b371bf2369a64bc2e11498583894188"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70957631f3cf4ddb74d5b90d175fce45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#a70957631f3cf4ddb74d5b90d175fce45">addStop</a> ()</td></tr>
 <tr class="separator:a70957631f3cf4ddb74d5b90d175fce45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4cec6b3f343cb67534bc97518ac0511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_movements.html#ad4cec6b3f343cb67534bc97518ac0511">addConstantSpeedMovement</a> (double forward, double strafe, double angular)</td></tr>
@@ -748,6 +750,56 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if targetSpeed contains normalized values, false if it's in the form [m/s, m/s, rad/s] </dd></dl>
+
+</div>
+</div>
+<a id="a9b371bf2369a64bc2e11498583894188"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b371bf2369a64bc2e11498583894188">&#9670;&nbsp;</a></span>setFrictionConstants()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Movements::setFrictionConstants </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>forwardFrictionK</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>strafeFrictionK</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angularFrictionK</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Setter for friction constants </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forwardFrictionK</td><td>coefficient of friction on forward component of speed vector </td></tr>
+    <tr><td class="paramname">strafeFrictionK</td><td>coefficient of friction on strafe component of speed vector </td></tr>
+    <tr><td class="paramname">angularFrictionK</td><td>coefficient of friction on angular component of speed vector </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
